@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="settings_items_height">61dp</dimen>
+    <dimen name="settings_layout_padding_right">12dp</dimen>
+    <dimen name="settings_layout_padding_left">16dp</dimen>
+    <dimen name="icons_padding_left">8dp</dimen>
+    <dimen name="size_settings">16sp</dimen>
+    <dimen name="size_main">22sp</dimen>
+    <dimen name="radius_main">16sp</dimen>
+</resources>
