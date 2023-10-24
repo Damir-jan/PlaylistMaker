@@ -11,20 +11,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val button = findViewById<Button>(R.id.Search)
-        val button2 = findViewById<Button>(R.id.Mediateka)
-        val button3 = findViewById<Button>(R.id.Settings)
+        val SearchButton = findViewById<Button>(R.id.Search)
+        val MediatekaButton = findViewById<Button>(R.id.Mediateka)
+        val SettingsButton = findViewById<Button>(R.id.Settings)
 
 
-        button3.setOnClickListener {
+        SettingsButton.setOnClickListener {
             val displayIntent = Intent(this, SettingsActivity::class.java)
             startActivity(displayIntent)
         }
-        button2.setOnClickListener {
+        MediatekaButton.setOnClickListener {
             val displayIntent = Intent(this, MediatekaActivity::class.java)
             startActivity(displayIntent)
         }
-        button.setOnClickListener {
+        SearchButton.setOnClickListener {
             val displayIntent = Intent(this, SearchActivity::class.java)
             startActivity(displayIntent)
         }

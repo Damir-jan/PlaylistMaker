@@ -7,4 +7,6 @@
     <dimen name="size_settings">16sp</dimen>
     <dimen name="size_main">22sp</dimen>
     <dimen name="radius_main">16sp</dimen>
+    <dimen name="settings_text_padding_right">44dp</dimen>
+    <dimen name="settings_back_switch">12dp</dimen>
 </resources>

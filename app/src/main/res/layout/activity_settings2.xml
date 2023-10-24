@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/light_mode"
             android:layout_gravity="center_vertical"
-            android:paddingHorizontal="12dp"
+            android:paddingHorizontal="@dimen/settings_back_switch"
             android:foreground="?attr/selectableItemBackground"/>
 
         <TextView
@@ -28,9 +28,10 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@string/title_settings"
-            android:textColor="#1A1B22"
-            android:textSize="22sp"
-            android:paddingStart="26sp"
+            android:textAllCaps="false"
+            android:textColor="@color/black_colors"
+            android:textSize="26sp"
+            android:paddingStart="12dp"
             tools:ignore="RtlSymmetry" />
 
     </LinearLayout>
@@ -41,9 +42,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
+
         android:layout_height="@dimen/settings_items_height"
-        android:paddingEnd="@dimen/settings_layout_padding_right"
-        android:paddingStart="@dimen/settings_layout_padding_left"
         android:orientation="horizontal">
 
         <TextView
@@ -52,7 +52,10 @@
             android:gravity="center_vertical"
             android:text="@string/dark_theme"
             android:textSize="@dimen/size_settings"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:paddingHorizontal="12dp"
+            android:paddingEnd="@dimen/settings_text_padding_right"
+            android:paddingStart="@dimen/settings_layout_padding_left"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -66,8 +69,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_items_height"
-        android:paddingEnd="@dimen/settings_layout_padding_right"
-        android:paddingStart="@dimen/settings_layout_padding_left"
         android:orientation="horizontal">
 
         <TextView
@@ -76,6 +77,8 @@
             android:gravity="center_vertical"
             android:text="@string/share"
             android:textSize="@dimen/size_settings"
+            android:paddingEnd="@dimen/settings_text_padding_right"
+            android:paddingStart="@dimen/settings_layout_padding_left"
             android:textColor="@color/black" />
 
         <ImageView
@@ -83,14 +86,13 @@
             android:layout_height="match_parent"
             android:src="@drawable/share"
             android:layout_gravity="end"
-            android:paddingLeft="@dimen/icons_padding_left" />
+            android:paddingStart="@dimen/icons_padding_left"
+            android:paddingEnd="@dimen/settings_layout_padding_right"/>
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_items_height"
-        android:paddingEnd="@dimen/settings_layout_padding_right"
-        android:paddingStart="@dimen/settings_layout_padding_left"
         android:orientation="horizontal">
 
         <TextView
@@ -99,6 +101,8 @@
             android:gravity="center_vertical"
             android:text="@string/write_support"
             android:textSize="@dimen/size_settings"
+            android:paddingEnd="@dimen/settings_text_padding_right"
+            android:paddingStart="@dimen/settings_layout_padding_left"
             android:textColor="@color/black" />
 
         <ImageView
@@ -106,13 +110,12 @@
             android:layout_height="match_parent"
             android:src="@drawable/support"
             android:layout_gravity="end"
-            android:paddingLeft="@dimen/icons_padding_left" />
+            android:paddingEnd="@dimen/settings_layout_padding_right"
+            android:paddingStart="@dimen/icons_padding_left" />
     </FrameLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_items_height"
-        android:paddingEnd="@dimen/settings_layout_padding_right"
-        android:paddingStart="@dimen/settings_layout_padding_left"
         android:orientation="horizontal">
 
         <TextView
@@ -121,6 +124,8 @@
             android:gravity="center_vertical"
             android:text="@string/terms_of_use"
             android:textSize="@dimen/size_settings"
+            android:paddingEnd="@dimen/settings_text_padding_right"
+            android:paddingStart="@dimen/settings_layout_padding_left"
             android:textColor="@color/black" />
 
         <ImageView
@@ -128,7 +133,8 @@
             android:layout_height="match_parent"
             android:src="@drawable/termsofuse"
             android:layout_gravity="end"
-            android:paddingLeft="@dimen/icons_padding_left" />
+            android:paddingEnd="@dimen/settings_layout_padding_right"
+            android:paddingStart="@dimen/icons_padding_left" />
     </FrameLayout>
 
 </LinearLayout>

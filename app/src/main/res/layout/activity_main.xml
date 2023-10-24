@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_colors"
+    android:background="@color/blue_colors"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="18dp"
         android:text="@string/title_hello"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:textSize="26sp" />
 
     <Button
@@ -21,8 +21,9 @@
         android:layout_height="0dp"
         android:layout_marginBottom="6dp"
         android:layout_weight="1"
-        android:backgroundTint="#ffffff"
+        android:backgroundTint="@color/white"
         android:text="@string/title_search"
+        android:textAllCaps="false"
         android:textColor="@color/black_colors"
         android:textSize="@dimen/size_main"
         app:cornerRadius="@dimen/radius_main"
@@ -38,8 +39,9 @@
         android:layout_height="0dp"
         android:layout_marginBottom="6dp"
         android:layout_weight="1"
-        android:backgroundTint="#ffffff"
+        android:backgroundTint="@color/white"
         android:text="@string/title_media"
+        android:textAllCaps="false"
         android:textColor="@color/black_colors"
         android:textSize="@dimen/size_main"
         app:cornerRadius="@dimen/radius_main"
@@ -55,8 +57,9 @@
         android:layout_height="0dp"
         android:layout_marginBottom="6dp"
         android:layout_weight="1"
-        android:backgroundTint="#ffffff"
+        android:backgroundTint="@color/white"
         android:text="@string/title_settings"
+        android:textAllCaps="false"
         android:textColor="@color/black_colors"
         android:textSize="@dimen/size_main"
         app:cornerRadius="@dimen/radius_main"
