@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <!-- это строка настроек -->
+    <style name="string_settings">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/menu_height</item>
+        <item name="android:layout_marginStart">@dimen/settings_indentation_left</item>
+        <item name="android:layout_marginEnd">@dimen/settings_indentation_right</item>
+        <item name="android:layout_marginVertical">@dimen/settings_menu_vertical</item>
+        <item name="android:textSize">@dimen/size_settings</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="icon_settings">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_marginEnd">12dp</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_marginBottom">@dimen/indent_bottom</item>
+    <item name="android:layout_marginTop">@dimen/menu_height</item>
+    <item name="android:layout_gravity">end</item>
+    </style>
+</resources>
+
+
+
+
