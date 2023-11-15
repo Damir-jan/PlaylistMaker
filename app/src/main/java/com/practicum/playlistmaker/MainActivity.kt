@@ -10,6 +10,7 @@ import android.widget.Toast
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_PlaylistMaker)
         setContentView(R.layout.activity_main)
         val searchButton = findViewById<Button>(R.id.Search)
         val mediatekaButton = findViewById<Button>(R.id.Mediateka)

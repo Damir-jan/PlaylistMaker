@@ -9,6 +9,12 @@
     <string name="write_support" translatable="false">Написать в поддержку</string>
     <string name="terms_of_use" translatable="false">Пользовательское соглашение</string>
     <string name="todo" translatable="false">TODO</string>
-
+    <string name="search" translatable="false">Поиск</string>
+    <string name="courseURL" translatable="false">https://practicum.yandex.ru/profile/android-developer/</string>
+    <string name="supportEmail" translatable="false">damgaripov1@yandex.ru</string>
+    <string name="supportSubject" translatable="false">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="supportMail" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="termsOfServiceUrl" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="message" translatable="false">Посмотри крутой курс по Андроид-разработке в Практикуме:</string>
 
 </resources>

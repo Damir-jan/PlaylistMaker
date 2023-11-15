@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="black_colors">#1A1B22</color>
     <color name="blue_colors">#3772E7</color>
-    <color name="black_black">#000000</color>
+    <color name="black_colors">#000000</color>
     <color name="text">#fff</color>
+    <color name="switch_tint">#3772E7</color>
+    <color name="switch_thumbTint">#FFFFFF</color>
+    <color name="search_icon">#1A1B22</color>
 </resources>
