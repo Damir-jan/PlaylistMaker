@@ -34,25 +34,28 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            hideKeyboard()
         }
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 inputText = s.toString()
                 clearButton.visibility = clearButtonVisibility(s)
+
+
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (s.isNullOrEmpty()) {
-                    hideKeyboard()
-                }
+
             }
         }
+
         inputEditText.addTextChangedListener(simpleTextWatcher)
+
         if (savedInstanceState != null) {
             inputText = savedInstanceState.getString("inputText")
             inputEditText.setText(inputText)

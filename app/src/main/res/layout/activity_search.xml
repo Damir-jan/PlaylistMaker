@@ -56,15 +56,14 @@
         <EditText
             android:id="@+id/Search_line"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
             android:background="@drawable/search_corner_edittext"
             android:drawableStart="@drawable/search_icon"
-            android:drawablePadding="4dp"
+            android:drawablePadding="@dimen/icons_padding_hint"
             android:hint="@string/title_search"
             android:textColorHint="@color/search_icon"
             android:inputType="text"
             android:maxLines="1"
-            android:maxLength="15"
             android:layout_gravity="center|end"
             android:paddingVertical="@dimen/search_margin_vertical"
             android:paddingStart="@dimen/search_editText_padding"
@@ -79,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/title_top"
             android:layout_gravity="center|end"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:src="@drawable/clear_mode"
             android:visibility="gone" />
     </FrameLayout>
 

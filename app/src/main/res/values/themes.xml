@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/blue_colors</item>
         <item name="colorSecondary">@color/white</item>
         <item name="colorOnPrimary">@color/black_colors</item>
+        <item name="colorOnSecondary">@color/black_colors</item>
 
 
         <!-- Customize your light theme here. -->

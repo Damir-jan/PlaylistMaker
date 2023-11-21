@@ -65,18 +65,8 @@
             android:textFontWeight="400"/>
 
         <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:paddingVertical="@dimen/margin_vertical"
-            android:paddingStart="9dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="@dimen/margin_vertical"
-            android:layout_marginEnd="@dimen/switch_indent"
-            android:switchMinWidth="@dimen/switch_indent"
-            android:thumbTint="@color/switch_tint"
-            android:trackTint="@color/switch_thumbTint"
-            tools:ignore="RtlSymmetry,UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+            style="@style/switch_settings"
+            tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
     </FrameLayout>
 
 

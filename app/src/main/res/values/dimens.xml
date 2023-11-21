@@ -26,9 +26,10 @@
 
     <!-- это окно поиска -->
     <dimen name="search_margin_horizontal">16dp</dimen>
-    <dimen name="search_corner_radius">16dp</dimen>
+    <dimen name="search_corner_radius">8dp</dimen>
     <dimen name="search_editText_padding">14dp</dimen>
-    <dimen name="search_margin_vertical">8dp</dimen>
+    <dimen name="search_margin_vertical">8.5dp</dimen>
+    <dimen name="icons_padding_hint">8dp</dimen>
 
 
 </resources>
