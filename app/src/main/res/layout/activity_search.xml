@@ -1,16 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical"
+    android:theme="@style/Theme.PlaylistMaker">
 
-    <TextView
-        android:id="@+id/message"
+    <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="Привет, ты в попал в меню поиска!"/>
+        android:layout_height="@dimen/layot_height"
+        android:orientation="horizontal"
+        tools:ignore="ExtraText">
 
-</FrameLayout>
+        <ImageButton
+            android:id="@+id/Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/settings_image_button"
+            android:layout_marginStart="@dimen/settings_image_button"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/light_mode" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_height"
+            android:layout_marginVertical="@dimen/settings_image_button"
+            android:layout_marginEnd="@dimen/indent_right"
+            android:fontFamily="@font/ys_display_medium"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/indent_title"
+            android:paddingTop="@dimen/title_top"
+            android:paddingBottom="@dimen/indent_title"
+            android:text="@string/search"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnPrimary"
+            android:textFontWeight="500"
+            android:textSize="@dimen/text_size_title"
+            tools:ignore="RtlSymmetry" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/indent_right"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/search_margin_horizontal"
+        android:paddingVertical="@dimen/search_margin_vertical">
+
+
+        <EditText
+            android:id="@+id/Search_line"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@drawable/search_corner_edittext"
+            android:drawableStart="@drawable/search_icon"
+            android:drawablePadding="@dimen/icons_padding_hint"
+            android:hint="@string/title_search"
+            android:textColorHint="@color/search_icon"
+            android:inputType="text"
+            android:maxLines="1"
+            android:layout_gravity="center|end"
+            android:paddingVertical="@dimen/search_margin_vertical"
+            android:paddingStart="@dimen/search_editText_padding"
+            app:cardCornerRadius="@dimen/search_corner_radius"
+            tools:ignore="RtlSymmetry"
+            android:fontFamily="@font/ys_display_regular"
+            />
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/title_top"
+            android:layout_gravity="center|end"
+            android:src="@drawable/clear_mode"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

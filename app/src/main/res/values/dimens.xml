@@ -23,4 +23,15 @@
     <dimen name="indent_right">52dp</dimen>
     <dimen name="layot_height">56dp</dimen>
     <dimen name="settings_items_height">61dp</dimen>
+
+    <!-- это окно поиска -->
+    <dimen name="search_margin_horizontal">16dp</dimen>
+    <dimen name="search_corner_radius">8dp</dimen>
+    <dimen name="search_editText_padding">14dp</dimen>
+    <dimen name="search_margin_vertical">8.5dp</dimen>
+    <dimen name="icons_padding_hint">8dp</dimen>
+
+
 </resources>
+
+
