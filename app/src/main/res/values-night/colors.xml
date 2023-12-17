@@ -7,4 +7,5 @@
     <color name="switch_tint">#3772E7</color>
     <color name="switch_thumbTint">#9FBBF3</color>
     <color name="search_icon">#1A1B22</color>
+    <color name="light_mode_icon">#FFFFFFFF</color>
 </resources>
