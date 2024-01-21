@@ -24,7 +24,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/todo"
             android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/light_mode" />
+            android:src="@drawable/light_mode_back" />
 
         <TextView
             android:layout_width="match_parent"
@@ -82,4 +82,12 @@
             android:visibility="gone" />
     </FrameLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/DataTracks"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
 </LinearLayout>
+

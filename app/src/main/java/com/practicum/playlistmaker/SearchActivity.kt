@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import Track
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -9,19 +10,27 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.practicum.android.playlistmaker.classes.tracksData
 
 class SearchActivity : AppCompatActivity() {
 
+    private lateinit var recView: RecyclerView
+    private lateinit var adapter: TracksAdapter
+    private lateinit var tracks:MutableList<Track>
+
     private var inputText: String? = null
     @SuppressLint("WrongViewCast", "MissingInflatedId")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        tracks = tracksData.getTracks()
+
 
         val set_button = findViewById<ImageButton>(R.id.Back)
         val inputEditText = findViewById<EditText>(R.id.Search_line)
@@ -61,6 +70,10 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.setText(inputText)
         }
 
+        recView = findViewById(R.id.DataTracks)
+        adapter = TracksAdapter(tracks)
+        recView.adapter = adapter
+        recView.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -16,5 +16,7 @@
     <string name="supportMail" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="termsOfServiceUrl" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="message" translatable="false">Посмотри крутой курс по Андроид-разработке в Практикуме:</string>
+    <string name="sv_albumPicture" translatable="false">Обложка альбома</string>
+
 
 </resources>

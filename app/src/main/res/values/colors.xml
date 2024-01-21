@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFFFF</color>
-    <color name="black_colors">#1A1B22</color>
+    <color name="near_black_colors">#1A1B22</color>
+    <color name="black_colors">#000000</color>
     <color name="blue_colors">#3772E7</color>
     <color name="text">#FF000000</color>
     <color name="switch_tint">#E6E8EB</color>
     <color name="switch_thumbTint">#E6E8EB</color>
     <color name="search_icon">#AEAFB4</color>
+    <color name="light_mode_icon">#AEAFB4</color>
 
 </resources>
