@@ -49,10 +49,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderImage: ImageView
     private lateinit var inputEditText: EditText
     private lateinit var updateButton: Button
-    private val adapter = TracksAdapter()
+    private val adapter = TracksAdapter(tracksList)
 
 
-    @SuppressLint("WrongViewCast", "MissingInflatedId")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +59,7 @@ class SearchActivity : AppCompatActivity() {
 
 
 
-        val set_button = findViewById<ImageButton>(R.id.Back)
+        val setButton = findViewById<ImageButton>(R.id.Back)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         inputEditText = findViewById(R.id.Search_line)
         placeholderMessage = findViewById(R.id.placeholderMessage)
@@ -74,7 +73,7 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        set_button.setOnClickListener {
+        setButton.setOnClickListener {
             val displayIntent = Intent(this, MainActivity::class.java)
             startActivity(displayIntent)
         }
@@ -120,9 +119,9 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    fun searchTrack() {
-        val call = itunesService.search(inputEditText.text.toString())
-            .enqueue(object : Callback<SearchResponse> {        //тут вызываешь метод который указан у тебя в api активити и передаешь в него экземпляр класса editText из которого ты берешь сам текст
+    private fun searchTrack() {
+        itunesService.search(inputEditText.text.toString())
+            .enqueue(object : Callback<SearchResponse> {
 
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
@@ -130,12 +129,13 @@ class SearchActivity : AppCompatActivity() {
                     response: Response<SearchResponse>,
                 ) {
                     if (response.code() == 200) {
+                        Log.d("y", response.body()?.results.toString())
                         if (response.body()?.results?.isNotEmpty() == true){
                             tracksList.clear()
                             tracksList.addAll(response.body()?.results!!)
                             adapter.notifyDataSetChanged()
                             showMessage("", "")
-                            showButton(false)
+                            //showButton(false)
                         } else {
                             showMessage("Ничего не нашлось","")
                             showButton(false)
@@ -229,7 +229,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showMessage(text: String, additionalText: String) {
+    fun showMessage(text: String, additionalText: String) {
         if (text.isNotEmpty()) {
 
             placeholderMessage.visibility = View.VISIBLE
