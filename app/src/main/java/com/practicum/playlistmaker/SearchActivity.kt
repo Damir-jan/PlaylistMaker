@@ -26,6 +26,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
+
 class SearchActivity : AppCompatActivity() {
 
     private var inputText: String? = null
@@ -45,8 +46,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var recView: RecyclerView
     private val tracksList = ArrayList<Track>()
 
-    private lateinit var placeholderMessage: TextView
-    private lateinit var placeholderImage: ImageView
+    private lateinit var placeHolderMessage: TextView
+    private lateinit var placeHolderImage: ImageView
     private lateinit var inputEditText: EditText
     private lateinit var updateButton: Button
     private val adapter = TracksAdapter(tracksList)
@@ -62,9 +63,10 @@ class SearchActivity : AppCompatActivity() {
         val setButton = findViewById<ImageButton>(R.id.Back)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         inputEditText = findViewById(R.id.Search_line)
-        placeholderMessage = findViewById(R.id.placeholderMessage)
-        placeholderImage = findViewById(R.id.placeholderImage)
+        this.placeHolderMessage = findViewById(R.id.placeholderMessage)
+        this.placeHolderImage = findViewById(R.id.placeholderImage)
         updateButton = findViewById(R.id.updateButton)
+
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -129,25 +131,29 @@ class SearchActivity : AppCompatActivity() {
                     response: Response<SearchResponse>,
                 ) {
                     if (response.code() == 200) {
-                        Log.d("y", response.body()?.results.toString())
+                        Log.d("Search", response.body()?.results.toString())
                         if (response.body()?.results?.isNotEmpty() == true){
                             tracksList.clear()
                             tracksList.addAll(response.body()?.results!!)
                             adapter.notifyDataSetChanged()
+                            showPlaceHolder(null)
                             showMessage("", "")
-                            //showButton(false)
+                            showButton(false)
                         } else {
+                            showPlaceHolder(PlaceHolderPicture.NothingToFind)
                             showMessage("Ничего не нашлось","")
                             showButton(false)
                             Log.d("y", response.body()?.results.toString())
                         }
                     } else {
+                        showPlaceHolder(PlaceHolderPicture.NoInternet)
                         showMessage("Проблемы со связью", "Загрузка не удалась. Проверьте подключение к интернету")
                         showButton(true)
                     }
                 }
 
                 override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                    showPlaceHolder(PlaceHolderPicture.NoInternet)
                     showMessage("Проблемы со связью", "Загрузка не удалась. Проверьте подключение к интернету")
                     showButton(true)
                 }
@@ -157,91 +163,40 @@ class SearchActivity : AppCompatActivity() {
     private fun showButton(show: Boolean) {
         if (show) {
             updateButton.visibility = View.VISIBLE
-        } else
+        } else {
             updateButton.visibility = View.GONE
+        }
     }
 
-
-
-    /* private fun searchTrack(searchText : String) {
-         itunesService.search(searchText)
-             .enqueue(object : Callback<SearchResponse> {
-                 @SuppressLint("NotifyDataSetChanged")
-
-                 override fun onResponse(
-                     call: Call<SearchResponse>,
-                     response: Response<SearchResponse>
-                 ) {
-
-                     if (response.isSuccessful) {
-                         val trackResponse = response.body()
-                         if (trackResponse!=null && trackResponse.results.isNotEmpty()) {
-                             tracks.clear()
-                             tracks.addAll(trackResponse.results)
-                             recView.adapter?.notifyDataSetChanged()
-                             showMessage("")
-                         } else {
-                             showMessage(getString(R.string.nothingToFind))
-                             placeholderImage.visibility = View.VISIBLE
-                             placeholderImage.setImageResource(R.drawable.nothing_to_find)
-                             updateButton.visibility = View.GONE
-                         }
-                     } else {
-                         showMessage(getString(R.string.noInternetError))
-                         placeholderImage.visibility = View.VISIBLE
-                         updateButton.visibility = View.VISIBLE
-                         placeholderImage.setImageResource(R.drawable.no_internet_error)
-                     }
-                 }
-
-                 @SuppressLint("NotifyDataSetChanged")
-                 override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                     showMessage(getString(R.string.noInternetError))
-                     tracks.clear()
-                     recView.adapter?.notifyDataSetChanged()
-                     placeholderImage.visibility = View.VISIBLE
-                     updateButton.visibility = View.VISIBLE
-                    // placeholderImage.setImageResource(R.drawable.something_went_wrong)
-                 }
-             })
-     }
-
-                /*     if (response.code() == 200) {
-                         tracks.clear()
-                         val results = response.body()?.results ?: listOf()
-                         if (results.isNotEmpty()) {
-                             tracks.addAll(results)
-                             //adapter.notifyDataSetChanged()//если ответ не пустой то добавляешь их в лист
-                         }
-                         if (tracks.isEmpty() && inputEditText.text.isNotEmpty()) {
-                             showMessage(getString(R.string.nothingToFind))
-                         } else {
-                             showMessage("")
-                         }
-                     }
-                 }
-                 override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                     showMessage(getString(R.string.noInternetError))
-                 }
-             })
-     } */*/
-
+    private fun showPlaceHolder(picture: PlaceHolderPicture?) {
+        if (picture != null) {
+            placeHolderImage.setImageResource(picture.resourceId)
+            placeHolderImage.visibility = View.VISIBLE
+        } else {
+            placeHolderImage.visibility = View.GONE
+        }
+    }
 
 
     @SuppressLint("NotifyDataSetChanged")
     fun showMessage(text: String, additionalText: String) {
         if (text.isNotEmpty()) {
-
-            placeholderMessage.visibility = View.VISIBLE
+            placeHolderMessage.visibility = View.VISIBLE
             tracksList.clear()
             adapter.notifyDataSetChanged()
-            recView.adapter?.notifyDataSetChanged()
-            placeholderMessage.text = text
+            placeHolderMessage.text = text
+            if (additionalText.isNotEmpty()){
+                placeHolderMessage.text = "$text\n\n$additionalText"
+            }
         } else {
-            placeholderMessage.visibility = View.GONE
+            placeHolderMessage.visibility = View.GONE
         }
     }
 
+    enum class PlaceHolderPicture(val resourceId: Int) {
+        NothingToFind(R.drawable.nothing_to_find),
+        NoInternet(R.drawable.no_internet_error)
+    }
     override fun onSaveInstanceState(outState: Bundle) {
                     super.onSaveInstanceState(outState)
 

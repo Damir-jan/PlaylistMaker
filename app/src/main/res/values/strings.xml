@@ -20,5 +20,6 @@
     <string name="nothingToFind" translatable="false">ничего не найдено</string>
     <string name="noInternetError" translatable="false">Нет интернета</string>
     <string name="update" translatable="false">Обновить</string>
+    <string name="nothing_to_find" translatable="false">Ничего не нашлось</string>
 
 </resources>
