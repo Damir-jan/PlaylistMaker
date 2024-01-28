@@ -26,7 +26,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-
 class SearchActivity : AppCompatActivity() {
 
     private var inputText: String? = null
@@ -53,11 +52,10 @@ class SearchActivity : AppCompatActivity() {
     private val adapter = TracksAdapter(tracksList)
 
 
-
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
 
 
         val setButton = findViewById<ImageButton>(R.id.Back)
@@ -83,6 +81,8 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             inputEditText.setText("")
             hideKeyboard()
+            tracksList.clear()
+            adapter.notifyDataSetChanged()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -132,7 +132,7 @@ class SearchActivity : AppCompatActivity() {
                 ) {
                     if (response.code() == 200) {
                         Log.d("Search", response.body()?.results.toString())
-                        if (response.body()?.results?.isNotEmpty() == true){
+                        if (response.body()?.results?.isNotEmpty() == true) {
                             tracksList.clear()
                             tracksList.addAll(response.body()?.results!!)
                             adapter.notifyDataSetChanged()
@@ -141,20 +141,26 @@ class SearchActivity : AppCompatActivity() {
                             showButton(false)
                         } else {
                             showPlaceHolder(PlaceHolderPicture.NothingToFind)
-                            showMessage("Ничего не нашлось","")
+                            showMessage("Ничего не нашлось", "")
                             showButton(false)
                             Log.d("y", response.body()?.results.toString())
                         }
                     } else {
                         showPlaceHolder(PlaceHolderPicture.NoInternet)
-                        showMessage("Проблемы со связью", "Загрузка не удалась. Проверьте подключение к интернету")
+                        showMessage(
+                            "Проблемы со связью",
+                            "Загрузка не удалась. Проверьте подключение к интернету"
+                        )
                         showButton(true)
                     }
                 }
 
                 override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                     showPlaceHolder(PlaceHolderPicture.NoInternet)
-                    showMessage("Проблемы со связью", "Загрузка не удалась. Проверьте подключение к интернету")
+                    showMessage(
+                        "Проблемы со связью",
+                        "Загрузка не удалась. Проверьте подключение к интернету"
+                    )
                     showButton(true)
                 }
             })
@@ -179,13 +185,13 @@ class SearchActivity : AppCompatActivity() {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun showMessage(text: String, additionalText: String) {
+    private fun showMessage(text: String, additionalText: String) {
         if (text.isNotEmpty()) {
             placeHolderMessage.visibility = View.VISIBLE
             tracksList.clear()
             adapter.notifyDataSetChanged()
             placeHolderMessage.text = text
-            if (additionalText.isNotEmpty()){
+            if (additionalText.isNotEmpty()) {
                 placeHolderMessage.text = "$text\n\n$additionalText"
             }
         } else {
@@ -197,25 +203,31 @@ class SearchActivity : AppCompatActivity() {
         NothingToFind(R.drawable.nothing_to_find),
         NoInternet(R.drawable.no_internet_error)
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
-                    super.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
 
-                    outState.putString("inputText", inputText)
-                }
+        outState.putString("inputText", inputText)
+    }
 
-                private fun clearButtonVisibility(s: CharSequence?): Int {
-                    return if (s.isNullOrEmpty()) {
-                        View.GONE
-                    } else {
-                        View.VISIBLE
-                    }
-                }
-                private fun hideKeyboard() {
-                    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-                }
 
-            }
+
+
+    private fun clearButtonVisibility(s: CharSequence?): Int {
+        return if (s.isNullOrEmpty()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
+
+}
 
 
 
