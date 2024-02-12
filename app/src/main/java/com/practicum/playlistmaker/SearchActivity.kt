@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class SearchActivity : AppCompatActivity() {
+
+    private val SEARCH_HISTORY_PREFERENCES = "practicum_example_preferences"
+
 
     private var inputText: String? = null
 
@@ -49,7 +53,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeHolderImage: ImageView
     private lateinit var inputEditText: EditText
     private lateinit var updateButton: Button
-    private val adapter = TracksAdapter(tracksList)
+    private lateinit var historyAdapter: TracksAdapter
+
+    private lateinit var tracksHistoryList: RecyclerView
+    private lateinit var cleanHistoryButton: Button
+    private lateinit var historyLayout: LinearLayout
+    private lateinit var searchHistory: SearchHistory
+
+
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -64,6 +75,15 @@ class SearchActivity : AppCompatActivity() {
         this.placeHolderMessage = findViewById(R.id.placeholderMessage)
         this.placeHolderImage = findViewById(R.id.placeholderImage)
         updateButton = findViewById(R.id.updateButton)
+        historyLayout = findViewById(R.id.historyLayout)
+
+        historyLayout.visibility = View.GONE
+
+        recView = findViewById(R.id.DataTracks)
+       // recView.adapter = historyAdapter
+        recView.layoutManager = LinearLayoutManager(this)
+
+
 
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -71,6 +91,11 @@ class SearchActivity : AppCompatActivity() {
                 searchTrack()
             }
             false
+        }
+
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            historyLayout.visibility = if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
+            cleanHistoryButton.visibility = if (hasFocus) View.VISIBLE else View.GONE
         }
 
         setButton.setOnClickListener {
@@ -82,7 +107,8 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.setText("")
             hideKeyboard()
             tracksList.clear()
-            adapter.notifyDataSetChanged()
+            recView.adapter?.notifyDataSetChanged()
+            historyAdapter.notifyDataSetChanged()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -93,6 +119,8 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 inputText = s.toString()
                 clearButton.visibility = clearButtonVisibility(s)
+                historyLayout.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
+
 
 
             }
@@ -114,9 +142,31 @@ class SearchActivity : AppCompatActivity() {
             searchTrack()
         }
 
-        recView = findViewById(R.id.DataTracks)
-        recView.adapter = adapter
-        recView.layoutManager = LinearLayoutManager(this)
+        val sharedPreferences = getSharedPreferences(SEARCH_HISTORY_PREFERENCES, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPreferences)
+
+        recView.adapter = TracksAdapter(tracksList, searchHistory)
+
+
+        tracksHistoryList = findViewById(R.id.tracksHistoryList)
+        tracksHistoryList.layoutManager = LinearLayoutManager(this)
+
+        val historyTracks = searchHistory.readTracks().toMutableList()
+
+        historyAdapter = TracksAdapter(historyTracks, searchHistory)
+        tracksHistoryList.adapter = historyAdapter
+
+        tracksHistoryList.adapter?.notifyDataSetChanged()
+
+        cleanHistoryButton = findViewById(R.id.cleanHistory)
+        cleanHistoryButton.setOnClickListener {
+            historyTracks.clear()
+            historyLayout.visibility = View.GONE
+            tracksHistoryList.adapter?.notifyDataSetChanged()
+        }
+
+
+
 
 
     }
@@ -135,7 +185,7 @@ class SearchActivity : AppCompatActivity() {
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracksList.clear()
                             tracksList.addAll(response.body()?.results!!)
-                            adapter.notifyDataSetChanged()
+                            historyAdapter.notifyDataSetChanged()
                             showPlaceHolder(null)
                             showMessage("", "")
                             showButton(false)
@@ -189,7 +239,7 @@ class SearchActivity : AppCompatActivity() {
         if (text.isNotEmpty()) {
             placeHolderMessage.visibility = View.VISIBLE
             tracksList.clear()
-            adapter.notifyDataSetChanged()
+            historyAdapter.notifyDataSetChanged()
             placeHolderMessage.text = text
             if (additionalText.isNotEmpty()) {
                 placeHolderMessage.text = "$text\n\n$additionalText"

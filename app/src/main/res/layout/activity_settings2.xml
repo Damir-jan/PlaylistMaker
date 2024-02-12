@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:theme="@style/Theme.PlaylistMaker"
-    android:background="?attr/colorSecondary" >
+    android:background="?attr/colorSecondary">
 
     <LinearLayout
 
@@ -13,7 +14,7 @@
         android:layout_height="@dimen/layot_height"
         android:orientation="horizontal"
         tools:ignore="ExtraText"
-        android:layout_marginBottom="@dimen/header_indent">
+        android:layout_marginBottom="@dimen/header_indent_24">
 
         <ImageButton
             android:id= "@+id/Back"
@@ -32,9 +33,9 @@
             android:layout_marginVertical="@dimen/settings_image_button"
             android:layout_marginEnd="@dimen/indent_right"
             android:gravity="center_vertical"
-            android:paddingStart="@dimen/indent_title"
+            android:paddingStart="@dimen/indent_title_12"
             android:paddingTop="@dimen/title_top"
-            android:paddingBottom="@dimen/indent_title"
+            android:paddingBottom="@dimen/indent_title_12"
             android:text="@string/title_settings"
             android:textAllCaps="false"
             android:textColor="?attr/colorOnSecondary"
@@ -59,13 +60,20 @@
             android:layout_marginTop="@dimen/settings_menu_vertical"
             android:layout_marginBottom="@dimen/settings_menu_vertical"
             android:text="@string/dark_theme"
-            android:textSize="@dimen/size_settings"
+            android:textSize="@dimen/size_settings_16"
             android:textColor="?attr/colorOnPrimary"
             android:fontFamily="@font/ys_display_regular"
             android:textFontWeight="400"/>
 
-        <Switch
+        <com.google.android.material.switchmaterial.SwitchMaterial
             style="@style/switch_settings"
+            android:id="@+id/themeSwitcher"
+            android:layout_marginHorizontal="60dp"
+            android:layout_gravity="start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:thumbTint="@color/switch_thumbTint"
+            app:trackTint="@color/switch_tint"
             tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
     </FrameLayout>
 

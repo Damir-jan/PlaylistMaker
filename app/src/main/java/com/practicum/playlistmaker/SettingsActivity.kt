@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("WrongViewCast", "MissingInflatedId")
@@ -19,6 +20,13 @@ class SettingsActivity : AppCompatActivity() {
         val support_button = findViewById<FrameLayout>(R.id.Support)
         val agreement_button = findViewById<FrameLayout>(R.id.TermsOfUse)
         val share_button = findViewById<FrameLayout>(R.id.Share)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+            (applicationContext as App).saveThemeToSharedPreferences()
+        }
 
         set_button.setOnClickListener {
             val displayIntent = Intent(this, MainActivity::class.java)

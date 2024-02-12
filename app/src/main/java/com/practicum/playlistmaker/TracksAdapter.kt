@@ -3,9 +3,13 @@ package com.practicum.playlistmaker
 import Track
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class TracksAdapter(private val tracks: List<Track>): RecyclerView.Adapter<TrackItemViewHolder> () {
+class TracksAdapter(private val tracks: List<Track>,
+                    private val searchHistory:SearchHistory
+                    ): RecyclerView.Adapter<TrackItemViewHolder> () {
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackItemViewHolder {
@@ -15,9 +19,14 @@ class TracksAdapter(private val tracks: List<Track>): RecyclerView.Adapter<Track
 
     override fun onBindViewHolder(holder: TrackItemViewHolder, position: Int) {
 
-        holder.bind(tracks[position])
+        val selectedTrack = tracks[position]
+        holder.bind(selectedTrack)
+        holder.itemView.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "Нажали на трек!", Toast.LENGTH_SHORT).show()
+            searchHistory.saveTrack(mutableListOf(selectedTrack))
 
-    }
+        }
+        }
     override fun getItemCount(): Int {
         return tracks.size
     }

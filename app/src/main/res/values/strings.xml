@@ -21,5 +21,8 @@
     <string name="noInternetError" translatable="false">Нет интернета</string>
     <string name="update" translatable="false">Обновить</string>
     <string name="nothing_to_find" translatable="false">Ничего не нашлось</string>
+    <string name="search_results" translatable="false">История поиска</string>
+    <string name="clean_history" translatable="false">Очистить историю</string>
+
 
 </resources>
