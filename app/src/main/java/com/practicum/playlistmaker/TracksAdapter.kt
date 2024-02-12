@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class TracksAdapter(
-    private var tracks: MutableList<Track>)
-    : RecyclerView.Adapter<TrackItemViewHolder>(){
+class TracksAdapter(private val tracks: List<Track>): RecyclerView.Adapter<TrackItemViewHolder> () {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_view_search, parent, false)
