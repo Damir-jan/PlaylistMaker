@@ -33,4 +33,5 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
         val json = sharedPreferences.getString(HISTORY_TRACKS_LIST_KEY, null) ?: return emptyArray()
         return Gson().fromJson(json, Array<Track>::class.java)
     }
+
 }

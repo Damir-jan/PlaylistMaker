@@ -17,12 +17,12 @@ class TrackItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val textViewFirst: TextView = itemView.findViewById(R.id.textViewFirst)
     private val textViewSecond: TextView = itemView.findViewById(R.id.textViewSecond)
-        private val as_TrackName: TextView = itemView.findViewById(R.id.as_TrackName)
+        private val asTrackName: TextView = itemView.findViewById(R.id.as_TrackName)
         private val imageView: ImageView = itemView.findViewById(R.id.image_album)
 
 
     fun bind(model: Track) {
-        as_TrackName.text = model.trackName
+        asTrackName.text = model.trackName
         textViewFirst.text = model.artistName
         textViewSecond.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
 
