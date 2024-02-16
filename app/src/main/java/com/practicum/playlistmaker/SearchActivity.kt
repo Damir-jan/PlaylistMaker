@@ -112,7 +112,6 @@ class SearchActivity : AppCompatActivity() {
             hideKeyboard()
             tracksList.clear()
             recView.adapter?.notifyDataSetChanged()
-            //historyAdapter.notifyDataSetChanged()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -123,14 +122,23 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 inputText = s.toString()
                 clearButton.visibility = clearButtonVisibility(s)
-                //historyLayout.visibility =
-                    //if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
-
-
+                historyLayout.visibility =
+                    if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
+                val searchText = s?.toString() ?: ""
+                clearButton.visibility = clearButtonVisibility(searchText)
 
+                if (searchText.isEmpty()) {
+                    recView.visibility = View.GONE
+                    historyLayout.visibility = View.VISIBLE
+                    cleanHistoryButton.visibility = View.VISIBLE
+                } else {
+                    recView.visibility = View.VISIBLE
+                    historyLayout.visibility = View.GONE
+                    cleanHistoryButton.visibility = View.GONE
+                }
             }
 
         }
