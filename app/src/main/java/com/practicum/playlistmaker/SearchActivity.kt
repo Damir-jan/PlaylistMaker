@@ -109,6 +109,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            inputEditText.clearFocus()
             hideKeyboard()
             tracksList.clear()
             recView.adapter?.notifyDataSetChanged()
