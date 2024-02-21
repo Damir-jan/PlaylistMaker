@@ -16,7 +16,7 @@
         tools:ignore="ExtraText">
 
         <ImageButton
-            android:id="@+id/Back"
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/settings_image_button"
@@ -33,9 +33,9 @@
             android:layout_marginEnd="@dimen/indent_right"
             android:fontFamily="@font/ys_display_medium"
             android:gravity="center_vertical"
-            android:paddingStart="@dimen/indent_title"
+            android:paddingStart="@dimen/indent_title_12"
             android:paddingTop="@dimen/title_top"
-            android:paddingBottom="@dimen/indent_title"
+            android:paddingBottom="@dimen/indent_title_12"
             android:text="@string/search"
             android:textAllCaps="false"
             android:textColor="?attr/colorOnPrimary"
@@ -54,82 +54,138 @@
 
 
         <EditText
-            android:id="@+id/Search_line"
+            android:id="@+id/search_line"
             android:layout_width="match_parent"
             android:layout_height="36dp"
+            android:layout_gravity="center|end"
             android:background="@drawable/search_corner_edittext"
             android:drawableStart="@drawable/search_icon"
             android:drawablePadding="@dimen/icons_padding_hint"
+            android:fontFamily="@font/ys_display_regular"
             android:hint="@string/title_search"
-            android:textColorHint="@color/search_icon"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_gravity="center|end"
-            android:paddingVertical="@dimen/search_margin_vertical"
             android:paddingStart="@dimen/search_editText_padding"
-            app:cardCornerRadius="@dimen/search_corner_radius"
-            tools:ignore="RtlSymmetry"
-            android:fontFamily="@font/ys_display_regular"
-            android:imeOptions="actionDone"
             android:singleLine="true"
-            />
+            android:textColor="@color/black_colors"
+            android:textColorHint="@color/search_icon"
+            app:cardCornerRadius="@dimen/search_corner_radius"
+            tools:ignore="RtlSymmetry" />
 
         <ImageView
             android:id="@+id/clearIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/title_top"
             android:layout_gravity="center|end"
+            android:layout_marginEnd="@dimen/title_top"
             android:src="@drawable/clear_mode"
             android:visibility="gone" />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/DataTracks"
-        android:layout_marginTop="16dp"
+        android:id="@+id/dataTracks"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
+
     </androidx.recyclerview.widget.RecyclerView>
 
     <ImageView
         android:id="@+id/placeholderImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/nothing_to_find"
         android:layout_gravity="center"
         android:layout_marginTop="102dp"
+        android:src="@drawable/nothing_to_find"
         android:visibility="gone">
+
     </ImageView>
 
-     <androidx.appcompat.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/placeholderMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="?attr/colorOnPrimary"
-        android:gravity="center_horizontal"
-        android:textSize="19sp"
-        android:textFontWeight="400"
-        tools:text="@string/nothing_to_find"
         android:fontFamily="@font/ys_display_medium"
-        android:paddingHorizontal="24dp">
-     </androidx.appcompat.widget.AppCompatTextView>
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="24dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textFontWeight="400"
+        android:textSize="19sp"
+        android:visibility="gone">
+
+    </androidx.appcompat.widget.AppCompatTextView>
 
     <Button
         android:id="@+id/updateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="?attr/colorOnSecondary"
+        android:fontFamily="@font/ys_display_medium"
         android:text="@string/update"
-        android:backgroundTint = "?attr/colorOnSecondary"
-        app:cornerRadius ="54dp"
+        android:textAllCaps="false"
         android:textColor="?attr/colorSecondary"
-        android:textSize="14sp"
         android:textFontWeight="500"
-        android:fontFamily = "@font/ys_display_medium"
-        android:textAllCaps = "false"
-        android:visibility="gone"/>
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:cornerRadius="54dp" />
 
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/historyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/icons_padding_left"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/ys_display_medium"
+                android:gravity="center"
+                android:paddingTop="18dp"
+                android:paddingBottom="@dimen/indent_title_12"
+                android:text="@string/search_results"
+                android:textAllCaps="false"
+                android:textColor="?attr/colorOnPrimary"
+                android:textFontWeight="500"
+                android:textSize="19sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tracksHistoryList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <Button
+                android:id="@+id/cleanHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/header_indent_24"
+                android:backgroundTint="?attr/colorOnSecondary"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/clean_history"
+                android:textAllCaps="false"
+                android:textColor="?attr/colorSecondary"
+                android:textFontWeight="500"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:cornerRadius="54dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
-

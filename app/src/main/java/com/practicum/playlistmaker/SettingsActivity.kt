@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("WrongViewCast", "MissingInflatedId")
@@ -15,17 +16,24 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings2)
 
-        val set_button = findViewById<ImageView>(R.id.Back)
-        val support_button = findViewById<FrameLayout>(R.id.Support)
-        val agreement_button = findViewById<FrameLayout>(R.id.TermsOfUse)
-        val share_button = findViewById<FrameLayout>(R.id.Share)
+        val setButton = findViewById<ImageView>(R.id.back)
+        val supportButton = findViewById<FrameLayout>(R.id.support)
+        val agreementButton = findViewById<FrameLayout>(R.id.termsOfUse)
+        val shareButton = findViewById<FrameLayout>(R.id.share)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
 
-        set_button.setOnClickListener {
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+            (applicationContext as App).saveThemeToSharedPreferences()
+        }
+
+        setButton.setOnClickListener {
             val displayIntent = Intent(this, MainActivity::class.java)
             startActivity(displayIntent)
         }
 
-        support_button.setOnClickListener {
+        supportButton.setOnClickListener {
 
 
             val email = resources.getString(R.string.supportEmail)
@@ -40,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
-        agreement_button.setOnClickListener {
+        agreementButton.setOnClickListener {
 
             val termsOfServiceUrl = resources.getString(R.string.termsOfServiceUrl)
             val intent = Intent(Intent.ACTION_VIEW)
@@ -48,7 +56,7 @@ class SettingsActivity : AppCompatActivity() {
             intent.data = Uri.parse(termsOfServiceUrl)
             startActivity(intent)
         }
-        share_button.setOnClickListener {
+        shareButton.setOnClickListener {
             val message = resources.getString(R.string.message)
             val courseURL = resources.getString(R.string.courseURL)
             val intent = Intent(Intent.ACTION_SEND)

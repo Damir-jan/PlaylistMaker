@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
+    private val SEARCH_HISTORY_PREFERENCES = "practicum_example_preferences"
+
+
     private var inputText: String? = null
 
     private val iTunesBaseUrl = "https://itunes.apple.com"
@@ -36,34 +40,45 @@ class SearchActivity : AppCompatActivity() {
     private val retrofit = Retrofit.Builder()
         .baseUrl(iTunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
-
         .build()
 
     private val itunesService = retrofit.create(ItunesApi::class.java)
 
 
     private lateinit var recView: RecyclerView
-    private val tracksList = ArrayList<Track>()
+    private val tracksList = mutableListOf<Track>()
 
     private lateinit var placeHolderMessage: TextView
     private lateinit var placeHolderImage: ImageView
     private lateinit var inputEditText: EditText
     private lateinit var updateButton: Button
-    private val adapter = TracksAdapter(tracksList)
+    private lateinit var historyAdapter: TracksAdapter
+
+    private lateinit var tracksHistoryList: RecyclerView
+    private lateinit var cleanHistoryButton: Button
+    private lateinit var historyLayout: LinearLayout
+    private lateinit var searchHistory: SearchHistory
 
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
 
-        val setButton = findViewById<ImageButton>(R.id.Back)
+        val setButton = findViewById<ImageButton>(R.id.back)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
-        inputEditText = findViewById(R.id.Search_line)
+        inputEditText = findViewById(R.id.search_line)
         this.placeHolderMessage = findViewById(R.id.placeholderMessage)
         this.placeHolderImage = findViewById(R.id.placeholderImage)
         updateButton = findViewById(R.id.updateButton)
+        historyLayout = findViewById(R.id.historyLayout)
+
+        historyLayout.visibility = View.GONE
+
+        recView = findViewById(R.id.dataTracks)
+        recView.layoutManager = LinearLayoutManager(this)
+
 
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -73,6 +88,20 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
+        inputEditText.setOnFocusChangeListener { _ , hasFocus ->
+            val historyTracks = searchHistory.readTracks().toMutableList()
+            if (historyTracks.isEmpty()) {
+                historyLayout.visibility = View.GONE
+                cleanHistoryButton.visibility = View.GONE
+            } else {
+                historyAdapter = TracksAdapter(historyTracks, searchHistory)
+                tracksHistoryList.adapter = historyAdapter
+                tracksHistoryList.adapter?.notifyDataSetChanged()
+                historyLayout.visibility = View.VISIBLE
+                cleanHistoryButton.visibility = View.VISIBLE
+            }
+        }
+
         setButton.setOnClickListener {
             val displayIntent = Intent(this, MainActivity::class.java)
             startActivity(displayIntent)
@@ -80,9 +109,10 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            inputEditText.clearFocus()
             hideKeyboard()
             tracksList.clear()
-            adapter.notifyDataSetChanged()
+            recView.adapter?.notifyDataSetChanged()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -93,12 +123,23 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 inputText = s.toString()
                 clearButton.visibility = clearButtonVisibility(s)
-
-
+                historyLayout.visibility =
+                    if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
+                val searchText = s?.toString() ?: ""
+                clearButton.visibility = clearButtonVisibility(searchText)
 
+                if (searchText.isEmpty()) {
+                    recView.visibility = View.GONE
+                    historyLayout.visibility = View.VISIBLE
+                    cleanHistoryButton.visibility = View.VISIBLE
+                } else {
+                    recView.visibility = View.VISIBLE
+                    historyLayout.visibility = View.GONE
+                    cleanHistoryButton.visibility = View.GONE
+                }
             }
 
         }
@@ -114,9 +155,29 @@ class SearchActivity : AppCompatActivity() {
             searchTrack()
         }
 
-        recView = findViewById(R.id.DataTracks)
-        recView.adapter = adapter
-        recView.layoutManager = LinearLayoutManager(this)
+        val sharedPreferences = getSharedPreferences(SEARCH_HISTORY_PREFERENCES, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPreferences)
+
+        recView.adapter = TracksAdapter(tracksList, searchHistory)
+
+
+        tracksHistoryList = findViewById(R.id.tracksHistoryList)
+        tracksHistoryList.layoutManager = LinearLayoutManager(this)
+
+        val historyTracks = searchHistory.readTracks().toMutableList()
+
+        historyAdapter = TracksAdapter(historyTracks, searchHistory)
+        tracksHistoryList.adapter = historyAdapter
+
+        tracksHistoryList.adapter?.notifyDataSetChanged()
+
+        cleanHistoryButton = findViewById(R.id.cleanHistory)
+        cleanHistoryButton.setOnClickListener {
+            historyTracks.clear()
+            sharedPreferences.edit().remove(HISTORY_TRACKS_LIST_KEY).apply()
+            historyLayout.visibility = View.GONE
+            tracksHistoryList.adapter?.notifyDataSetChanged()
+        }
 
 
     }
@@ -135,14 +196,16 @@ class SearchActivity : AppCompatActivity() {
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracksList.clear()
                             tracksList.addAll(response.body()?.results!!)
-                            adapter.notifyDataSetChanged()
+                            recView.adapter?.notifyDataSetChanged()
                             showPlaceHolder(null)
                             showMessage("", "")
                             showButton(false)
+                            historyLayout.visibility = View.GONE
                         } else {
                             showPlaceHolder(PlaceHolderPicture.NothingToFind)
                             showMessage("Ничего не нашлось", "")
                             showButton(false)
+                            historyLayout.visibility = View.GONE
                             Log.d("y", response.body()?.results.toString())
                         }
                     } else {
@@ -152,6 +215,7 @@ class SearchActivity : AppCompatActivity() {
                             "Загрузка не удалась. Проверьте подключение к интернету"
                         )
                         showButton(true)
+                        historyLayout.visibility = View.GONE
                     }
                 }
 
@@ -162,6 +226,7 @@ class SearchActivity : AppCompatActivity() {
                         "Загрузка не удалась. Проверьте подключение к интернету"
                     )
                     showButton(true)
+                    historyLayout.visibility = View.GONE
                 }
             })
     }
@@ -189,7 +254,7 @@ class SearchActivity : AppCompatActivity() {
         if (text.isNotEmpty()) {
             placeHolderMessage.visibility = View.VISIBLE
             tracksList.clear()
-            adapter.notifyDataSetChanged()
+            historyAdapter.notifyDataSetChanged()
             placeHolderMessage.text = text
             if (additionalText.isNotEmpty()) {
                 placeHolderMessage.text = "$text\n\n$additionalText"
@@ -209,8 +274,6 @@ class SearchActivity : AppCompatActivity() {
 
         outState.putString("inputText", inputText)
     }
-
-
 
 
     private fun clearButtonVisibility(s: CharSequence?): Int {

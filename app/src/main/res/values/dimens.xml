@@ -6,7 +6,8 @@
     <dimen name="title_top">10dp</dimen>
     <dimen name="margin_vertical">11dp</dimen>
     <dimen name="settings_back_switch">12dp</dimen>
-    <dimen name="indent_title">12dp</dimen>
+    <dimen name="indent_title_12">12dp</dimen>
+    <dimen name="size_settings_16">16sp</dimen>
     <dimen name="size_settings">16sp</dimen>
     <dimen name="radius_main">16sp</dimen>
     <dimen name="height_menu">16dp</dimen>
@@ -16,7 +17,7 @@
     <dimen name="settings_menu_vertical">21dp</dimen>
     <dimen name="text_size_title">22sp</dimen>
     <dimen name="size_main">22sp</dimen>
-    <dimen name="header_indent">24sp</dimen>
+    <dimen name="header_indent_24">24sp</dimen>
     <dimen name="settings_indentation_right">44dp</dimen>
     <dimen name="settings_text_padding_right">44dp</dimen>
     <dimen name="header_height">48dp</dimen>
