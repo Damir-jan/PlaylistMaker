@@ -20,6 +20,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,6 +60,20 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyLayout: LinearLayout
     private lateinit var searchHistory: SearchHistory
 
+    private val historyTrackClickListener: (Track) -> Unit = { clickedTrack ->
+        val playerIntent = Intent(this,PlayerActivity::class.java)
+        playerIntent.putExtra("clicked_track", Gson().toJson(clickedTrack))
+        startActivity(playerIntent)
+    }
+
+    private val currentTrackClickListener: (Track) -> Unit = { clickedTrack ->
+        searchHistory.saveTrack(listOf(clickedTrack))
+        val playerIntent = Intent(this,PlayerActivity::class.java)
+        playerIntent.putExtra("clicked_track", Gson().toJson(clickedTrack))
+        startActivity(playerIntent)
+    }
+
+
 
     @SuppressLint("NotifyDataSetChanged", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,13 +109,14 @@ class SearchActivity : AppCompatActivity() {
                 historyLayout.visibility = View.GONE
                 cleanHistoryButton.visibility = View.GONE
             } else {
-                historyAdapter = TracksAdapter(historyTracks, searchHistory)
+                historyAdapter = TracksAdapter(historyTracks, historyTrackClickListener)
                 tracksHistoryList.adapter = historyAdapter
                 tracksHistoryList.adapter?.notifyDataSetChanged()
                 historyLayout.visibility = View.VISIBLE
                 cleanHistoryButton.visibility = View.VISIBLE
             }
         }
+
 
         setButton.setOnClickListener {
             val displayIntent = Intent(this, MainActivity::class.java)
@@ -158,7 +174,7 @@ class SearchActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences(SEARCH_HISTORY_PREFERENCES, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPreferences)
 
-        recView.adapter = TracksAdapter(tracksList, searchHistory)
+        recView.adapter = TracksAdapter(tracksList, currentTrackClickListener)
 
 
         tracksHistoryList = findViewById(R.id.tracksHistoryList)
@@ -166,7 +182,7 @@ class SearchActivity : AppCompatActivity() {
 
         val historyTracks = searchHistory.readTracks().toMutableList()
 
-        historyAdapter = TracksAdapter(historyTracks, searchHistory)
+        historyAdapter = TracksAdapter(historyTracks, historyTrackClickListener)
         tracksHistoryList.adapter = historyAdapter
 
         tracksHistoryList.adapter?.notifyDataSetChanged()
