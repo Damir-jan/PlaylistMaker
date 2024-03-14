@@ -83,6 +83,14 @@
             android:visibility="gone" />
     </FrameLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/settings_text_padding_right"
+        android:layout_height="@dimen/settings_text_padding_right"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/blue_colors"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dataTracks"
         android:layout_width="match_parent"
@@ -90,6 +98,8 @@
         >
 
     </androidx.recyclerview.widget.RecyclerView>
+
+
 
     <ImageView
         android:id="@+id/placeholderImage"

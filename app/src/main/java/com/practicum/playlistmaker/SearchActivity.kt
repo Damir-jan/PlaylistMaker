@@ -4,8 +4,9 @@ import Track
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,7 +18,9 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -30,8 +33,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-    private val SEARCH_HISTORY_PREFERENCES = "practicum_example_preferences"
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    }
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { searchTrack() }
+    private lateinit var progressBar: ProgressBar
 
+
+    private val SEARCH_HISTORY_PREFERENCES = "practicum_example_preferences"
 
     private var inputText: String? = null
 
@@ -80,7 +92,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-
+        progressBar = findViewById(R.id.progressBar)
         val setButton = findViewById<ImageButton>(R.id.back)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         inputEditText = findViewById(R.id.search_line)
@@ -141,6 +153,7 @@ class SearchActivity : AppCompatActivity() {
                 clearButton.visibility = clearButtonVisibility(s)
                 historyLayout.visibility =
                     if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -198,7 +211,19 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     private fun searchTrack() {
+
+        placeHolderMessage.visibility = View.GONE
+        updateButton.visibility = View.GONE
+        historyLayout.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+
+
         itunesService.search(inputEditText.text.toString())
             .enqueue(object : Callback<SearchResponse> {
 
@@ -207,6 +232,7 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<SearchResponse>,
                     response: Response<SearchResponse>,
                 ) {
+                    progressBar.visibility = View.GONE
                     if (response.code() == 200) {
                         Log.d("Search", response.body()?.results.toString())
                         if (response.body()?.results?.isNotEmpty() == true) {
@@ -236,6 +262,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                    progressBar.visibility = View.GONE
                     showPlaceHolder(PlaceHolderPicture.NoInternet)
                     showMessage(
                         "Проблемы со связью",

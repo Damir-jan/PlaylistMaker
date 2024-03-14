@@ -1,23 +1,33 @@
 package com.practicum.playlistmaker
 
 import Track
-import android.content.Context
+import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.TypedValue
+import android.os.Handler
+import android.os.HandlerThread
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
+
+    private companion object {
+        const val CLICKED_TRACK: String = "clicked_track"
+        const val STATE_DEFAULT = 0
+        const val STATE_PREPARED = 1
+        const val STATE_PLAYING = 2
+        const val STATE_PAUSED = 3
+
+    }
+
+    private var playerState = STATE_DEFAULT
+    private var mediaPlayer = MediaPlayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +35,28 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val trackJson = intent.getStringExtra("clicked_track")
+        val trackJson = intent.getStringExtra(CLICKED_TRACK)
         val track = Gson().fromJson(trackJson, Track::class.java)
+
+        mediaPlayer = MediaPlayer()
+        preparePlayer(track)
+
 
         binding.trackName.text = track.trackName
         binding.artistName.text = track.artistName
         binding.trackTime.text = track.trackTimeMillis.formatToMinutesAndSeconds()
         binding.progressBar.text = track.trackTimeMillis.formatToMinutesAndSeconds()
+        binding.playButton.setImageResource(R.drawable.play_button)
+        binding.playButton.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                android.R.color.transparent
+            )
+        )
 
         if (track.collectionName.isNullOrEmpty()) {
             binding.trackAlbum.visibility = View.GONE
-            binding.album.visibility=View.GONE
+            binding.album.visibility = View.GONE
         } else {
             binding.trackAlbum.text = track.collectionName
         }
@@ -52,62 +73,94 @@ class PlayerActivity : AppCompatActivity() {
             .into(binding.albumPicture)
 
         binding.back.setOnClickListener { finish() }
-        /*val trackJson = intent.getStringExtra("clicked_track")
-        val track = Gson().fromJson(trackJson, Track::class.java)
 
-        val trackName = findViewById<TextView>(R.id.trackName)
-        val artistName = findViewById<TextView>(R.id.artistName)
-        val trackTimeMillis: TextView = findViewById(R.id.track_time)
-        val progressBar: TextView = findViewById(R.id.play_time)
-        val artworkUrlView: ImageView = findViewById(R.id.albumPicture)
-        val nameAlbum = findViewById<TextView>(R.id.trackAlbum)
-        val releaseDate = findViewById<TextView>(R.id.trackYear)
-        val nameGenre = findViewById<TextView>(R.id.trackGenre)
-        val country = findViewById<TextView>(R.id.trackСountry)
-        val album = findViewById<TextView>(R.id.album)
-
-        val cornerRadius = 8f
-        val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-        val releaseYear = track.releaseDate.substring(0, 4)
-
-        trackName.text = track.trackName
-        artistName.text = track.artistName
-        trackTimeMillis.text = dateFormat.format(track.trackTimeMillis)
-        progressBar.text = dateFormat.format(track.trackTimeMillis)
-
-        if (track.collectionName.isNullOrEmpty()) {
-            nameAlbum.visibility= View.GONE
-            album.visibility=View.GONE
-        } else {
-            nameAlbum.text = track.collectionName
+        binding.playButton.setOnClickListener {
+            playbackControl()
         }
-        releaseDate.text = releaseYear
-        nameGenre.text = track.primaryGenreName
-        country.text = track.country
+    }
 
-        Glide.with(applicationContext)
-            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
-            .centerCrop()
-            .transform(RoundedCorners(dpToPx(cornerRadius, applicationContext)))
-            .placeholder(R.drawable.placeholder)
-            .into(artworkUrlView)
+    override fun onResume() {
+        super.onResume()
+    }
 
-        val imageBack = findViewById<ImageView>(R.id.back)
-        imageBack.setOnClickListener {
-            finish()
-        }*/
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+
+    private fun preparePlayer(track: Track) {
+        mediaPlayer.setDataSource(track.previewUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            binding.playButton.isEnabled = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            binding.playButton.setImageResource(R.drawable.play_button)
+            playerState = STATE_PREPARED
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        binding.playButton.setImageResource(R.drawable.pause)
+        playerState = STATE_PLAYING
+        updateProgressBar()
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        binding.playButton.setImageResource(R.drawable.play_button)
+        playerState = STATE_PAUSED
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    private fun updateProgressBar() {
+        val handlerThread = HandlerThread("UpdateProgressBar")
+        handlerThread.start()
+
+        val handler = Handler(handlerThread.looper)
+        handler.post(object : Runnable {
+            override fun run() {
+                if (mediaPlayer.isPlaying) {
+                    val currentPosition = mediaPlayer.currentPosition
+                    val totalTime = mediaPlayer.duration
+                    val progress = (currentPosition.toFloat() / totalTime.toFloat() * 100).toInt()
+                    runOnUiThread {
+                        binding.progressBar.text =
+                            currentPosition.toLong().formatToMinutesAndSeconds()
+                    }
+                    handler.postDelayed(this, 1000)
+                }
+            }
+        })
+
     }
 }
 
-private fun Long.formatToMinutesAndSeconds(): String {
-    val minutes = this / 60000
-    val seconds = (this % 60000) / 1000
-    return "%02d:%02d".format(minutes, seconds)
-}
 
-private fun dpToPx(dp: Float, context: Context): Int {
-    return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics
-    ).toInt()
-}
+    private fun Long.formatToMinutesAndSeconds(): String {
+        val minutes = this / 60000
+        val seconds = (this % 60000) / 1000
+        return "%02d:%02d".format(minutes, seconds)
+    }
+
+
+
 
