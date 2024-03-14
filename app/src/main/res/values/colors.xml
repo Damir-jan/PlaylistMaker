@@ -9,5 +9,6 @@
     <color name="switch_thumbTint">#E6E8EB</color>
     <color name="search_icon">#AEAFB4</color>
     <color name="light_mode_icon">#AEAFB4</color>
+    <color name="color_player_text">#AEAFB4</color>
 
 </resources>

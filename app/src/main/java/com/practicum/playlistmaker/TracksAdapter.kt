@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TracksAdapter(
     private val tracks: MutableList<Track>,
-    private val searchHistory: SearchHistory
+    private val onClickListener: (clickedTrack : Track) -> Unit
 ) : RecyclerView.Adapter<TrackItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackItemViewHolder {
@@ -22,7 +22,7 @@ class TracksAdapter(
         val selectedTrack = tracks[position]
         holder.bind(selectedTrack)
         holder.itemView.setOnClickListener {
-            searchHistory.saveTrack(mutableListOf(selectedTrack))
+            onClickListener(selectedTrack)
 
         }
     }
