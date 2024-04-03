@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker
 
-import Track
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -24,6 +23,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.practicum.playlistmaker.data.dto.SearchResponse
+import com.practicum.playlistmaker.data.network.ItunesApi
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.ui.TracksAdapter
+import com.practicum.playlistmaker.ui.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -73,14 +77,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistory: SearchHistory
 
     private val historyTrackClickListener: (Track) -> Unit = { clickedTrack ->
-        val playerIntent = Intent(this,PlayerActivity::class.java)
+        val playerIntent = Intent(this, PlayerActivity::class.java)
         playerIntent.putExtra("clicked_track", Gson().toJson(clickedTrack))
         startActivity(playerIntent)
     }
 
     private val currentTrackClickListener: (Track) -> Unit = { clickedTrack ->
         searchHistory.saveTrack(listOf(clickedTrack))
-        val playerIntent = Intent(this,PlayerActivity::class.java)
+        val playerIntent = Intent(this, PlayerActivity::class.java)
         playerIntent.putExtra("clicked_track", Gson().toJson(clickedTrack))
         startActivity(playerIntent)
     }

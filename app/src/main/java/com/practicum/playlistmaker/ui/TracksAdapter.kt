@@ -1,10 +1,10 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui
 
-import Track
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.models.Track
 
 class TracksAdapter(
     private val tracks: MutableList<Track>,
