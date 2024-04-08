@@ -17,7 +17,7 @@
         android:name=".App">
 
         <activity
-            android:name=".PlayerActivity"
+            android:name=".ui.player.PlayerActivity"
             android:exported="false" />
 
         <activity

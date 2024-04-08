@@ -1,7 +1,12 @@
 package com.practicum.playlistmaker
 
+import PlayerRepository
 import android.app.Application
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatDelegate
+import com.practicum.playlistmaker.data.repositoryImpl.PlayerRepositoryImpl
+import com.practicum.playlistmaker.domain.InteractorImpl.PlayerInteractorImpl
+import com.practicum.playlistmaker.domain.interactor.PlayerInteractor
 
 const val PLAYLIST_MAKER_THEME = "playlist_maker_theme_preferences"
 const val NIGHT_THEM_KEY = "night_theme"
@@ -12,6 +17,14 @@ class App : Application() {
     private val sharedPrefs by lazy {
         getSharedPreferences(PLAYLIST_MAKER_THEME, MODE_PRIVATE)
     }
+
+    private val mediaPlayer: MediaPlayer = MediaPlayer()
+    private val playerRepository: PlayerRepository = PlayerRepositoryImpl(mediaPlayer)
+    private val playerInteractor: PlayerInteractor = PlayerInteractorImpl(playerRepository)
+
+    fun getPlayerInteractor() = playerInteractor
+    fun getPlayerRepository() = playerRepository
+
 
     var darkTheme = false
 
