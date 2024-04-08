@@ -11,11 +11,10 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
+import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.data.repositoryImpl.PlayerRepositoryImpl
 import com.practicum.playlistmaker.data.repositoryImpl.PlayerRepositoryImpl.Companion.STATE_COMPLETED
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.domain.InteractorImpl.PlayerInteractorImpl
 import com.practicum.playlistmaker.domain.interactor.PlayerInteractor
 import com.practicum.playlistmaker.domain.models.Track
 
@@ -34,19 +33,22 @@ class PlayerActivity : AppCompatActivity() {
 
     private var mediaPlayer = MediaPlayer()
 
-    private val playerRepository: PlayerRepository = PlayerRepositoryImpl(mediaPlayer)
-    private val playerInteractor: PlayerInteractor = PlayerInteractorImpl(playerRepository)
+    private lateinit var playerInteractor: PlayerInteractor
+    private lateinit var playerRepository: PlayerRepository
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        playerInteractor = (applicationContext as App).getPlayerInteractor()
+        playerRepository = (applicationContext as App).getPlayerRepository()
+
 
         val trackJson = intent.getStringExtra(CLICKED_TRACK)
         val track = Gson().fromJson(trackJson, Track::class.java)
 
-        mediaPlayer = MediaPlayer()
         playerInteractor.preparePlayer(track)
 
         playerInteractor.onPlayerStateChanged = { state ->
@@ -58,6 +60,7 @@ class PlayerActivity : AppCompatActivity() {
 
                 STATE_PREPARED, STATE_PAUSED, STATE_COMPLETED -> {
                     binding.playButton.setImageResource(R.drawable.play_button)
+
                 }
             }
         }
@@ -113,7 +116,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        playerInteractor.releasePlayer()
     }
 
 
@@ -125,8 +128,8 @@ class PlayerActivity : AppCompatActivity() {
         handler.post(object : Runnable {
             override fun run() {
                 if (mediaPlayer.isPlaying) {
-                    val currentPosition = mediaPlayer.currentPosition
-                    val totalTime = mediaPlayer.duration
+                    val currentPosition = playerInteractor.getPlayerCurrentPosition()
+                    val totalTime =  playerInteractor.getPlayerDuration()
                     val progress = (currentPosition.toFloat() / totalTime.toFloat() * 100).toInt()
                     runOnUiThread {
                         binding.progressBar.text =

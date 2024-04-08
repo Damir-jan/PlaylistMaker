@@ -1,3 +1,4 @@
+
 package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
@@ -336,6 +337,7 @@ class SearchActivity : AppCompatActivity() {
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
+
 
 }
 

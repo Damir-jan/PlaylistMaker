@@ -7,6 +7,7 @@ import com.practicum.playlistmaker.domain.models.Track
 class PlayerInteractorImpl(
     private var playerRepository: PlayerRepository
 ) : PlayerInteractor {
+
     override var onPlayerStateChanged: (state: Int) -> Unit
     get() = playerRepository.onPlayerStateChanged
     set(value) {
@@ -17,11 +18,19 @@ class PlayerInteractorImpl(
     set(value) {
         playerRepository.onPlayerCompletion = value
     }
-    override val playerDuration: Int
+
+    override fun getPlayerCurrentPosition(): Int {
+        return playerRepository.getCurrentPosition()
+    }
+
+    override fun getPlayerDuration(): Int {
+        return playerRepository.getDuration()
+    }
+    /*override val playerDuration: Int
     get() = playerRepository.playerDuration
     override val playerCurrentPosition: Int
     get() = playerRepository.playerCurrentPosition
-
+*/
     override fun preparePlayer(track: Track) {
         playerRepository.preparePlayer(track)
     }

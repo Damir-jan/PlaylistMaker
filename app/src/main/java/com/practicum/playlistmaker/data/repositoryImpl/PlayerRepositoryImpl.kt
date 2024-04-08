@@ -37,11 +37,19 @@ class PlayerRepositoryImpl(
             localOnPlayerCompletion = value
         }
 
-    override val playerDuration: Int
+    override fun getCurrentPosition(): Int {
+        return mediaPlayer.currentPosition
+    }
+
+    override fun getDuration(): Int {
+        return mediaPlayer.duration
+    }
+
+    /*override val playerDuration: Int
         get() = mediaPlayer.duration
     override val playerCurrentPosition: Int
         get() = mediaPlayer.currentPosition
-
+*/
 
     override fun preparePlayer(track: Track) {
         mediaPlayer.setDataSource(track.previewUrl)
@@ -84,6 +92,5 @@ class PlayerRepositoryImpl(
         const val STATE_PLAYING = 2
         const val STATE_PAUSED = 3
         const val STATE_COMPLETED = 4
-        const val MISTAKE = "Mistake"
     }
 }
