@@ -54,7 +54,7 @@
 
 
         <EditText
-            android:id="@+id/search_line"
+            android:id="@+id/searchLine"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_gravity="center|end"
@@ -157,6 +157,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/youSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/icons_padding_left"

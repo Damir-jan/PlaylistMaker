@@ -4,9 +4,9 @@ import PlayerRepository
 import android.app.Application
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmaker.data.repositoryImpl.PlayerRepositoryImpl
-import com.practicum.playlistmaker.domain.InteractorImpl.PlayerInteractorImpl
-import com.practicum.playlistmaker.domain.interactor.PlayerInteractor
+import com.practicum.playlistmaker.player.data.repositoryImpl.PlayerRepositoryImpl
+import com.practicum.playlistmaker.player.domain.InteractorImpl.PlayerInteractorImpl
+import com.practicum.playlistmaker.player.domain.interactor.PlayerInteractor
 
 const val PLAYLIST_MAKER_THEME = "playlist_maker_theme_preferences"
 const val NIGHT_THEM_KEY = "night_theme"
@@ -19,7 +19,7 @@ class App : Application() {
     }
 
     private val mediaPlayer: MediaPlayer = MediaPlayer()
-    private val playerRepository: PlayerRepository = PlayerRepositoryImpl(mediaPlayer)
+    private val playerRepository: PlayerRepository = PlayerRepositoryImpl()
     private val playerInteractor: PlayerInteractor = PlayerInteractorImpl(playerRepository)
 
     fun getPlayerInteractor() = playerInteractor
