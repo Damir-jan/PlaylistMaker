@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker
 
-import Track
+import com.practicum.playlistmaker.domain.models.Track
 import android.content.SharedPreferences
 import com.google.gson.Gson
 
