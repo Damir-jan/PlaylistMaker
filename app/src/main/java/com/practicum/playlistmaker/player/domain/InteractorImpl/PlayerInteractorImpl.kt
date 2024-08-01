@@ -15,19 +15,19 @@ class PlayerInteractorImpl(
             playerRepository.onPlayerCompletion = value
         }
 
-    override fun getPlayerCurrentPosition(): Int {
+   /* override fun getPlayerCurrentPosition(): Int {
         return playerRepository.getCurrentPosition()
     }
 
     override fun getPlayerDuration(): Int {
         return playerRepository.getDuration()
-    }
+    }*/
 
-    /*override val playerDuration: Int
+    override val playerDuration: Int
     get() = playerRepository.playerDuration
     override val playerCurrentPosition: Int
     get() = playerRepository.playerCurrentPosition
-*/
+
     override fun preparePlayer(track: Track) {
         playerRepository.preparePlayer(track)
     }

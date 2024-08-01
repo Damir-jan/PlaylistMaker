@@ -18,5 +18,8 @@ sealed interface SearchTracksState {
         val message: String
     ) : SearchTracksState
 
+    data class History(
+        val tracks: MutableList<Track>
+    ) : SearchTracksState
 
 }

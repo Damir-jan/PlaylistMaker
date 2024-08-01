@@ -1,9 +1,7 @@
 package com.practicum.playlistmaker.search.data.dto
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
-@Parcelize
 data class TrackDto(
         val trackId: Int,
         val trackName: String,
@@ -15,4 +13,4 @@ data class TrackDto(
         val primaryGenreName: String,
         val country: String,
         val previewUrl: String
-)   : Parcelable
+)   : Serializable

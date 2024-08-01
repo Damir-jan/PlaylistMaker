@@ -1,17 +1,22 @@
 package com.practicum.playlistmaker.player.ui.player
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.player.ui.models.PlayerStateInterface
+import com.practicum.playlistmaker.player.ui.models.PlayerState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -34,9 +39,10 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(CLICKED_TRACK, Track::class.java)
+            intent.getSerializableExtra(CLICKED_TRACK) as? Track
         } else {
-            intent.getParcelableExtra<Track>(CLICKED_TRACK)
+            @Suppress("DEPRECATION")
+            intent.getSerializableExtra(CLICKED_TRACK) as? Track
         }
 
         track?.let {
@@ -49,7 +55,7 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         viewModel.progressLiveData.observe(this) { progress ->
-            binding.progressBar.text = progress.toString()
+            binding.timer.text = progress.toString()
         }
 
         binding.back.setOnClickListener { finish() }
@@ -96,10 +102,22 @@ class PlayerActivity : AppCompatActivity() {
         }*/
 
     private fun setupUI(track: Track) {
+
+        val cornerRadius = 8f
+        val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+        val releaseYear = track.releaseDate.substring(0, 4)
+
+
         binding.trackName.text = track.trackName
         binding.artistName.text = track.artistName
-        binding.trackTime.text = track.trackTimeMillis.formatToMinutesAndSeconds()
-        binding.progressBar.text = track.trackTimeMillis.formatToMinutesAndSeconds()
+        binding.timer.text = track.trackTimeMillis.formatToMinutesAndSeconds()
+
+        binding.playButton.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                android.R.color.transparent
+            )
+        )
 
         if (track.collectionName.isNullOrEmpty()) {
             binding.trackAlbum.visibility = View.GONE
@@ -108,6 +126,7 @@ class PlayerActivity : AppCompatActivity() {
             binding.trackAlbum.text = track.collectionName
         }
 
+        binding.trackTime.text = track.trackTimeMillis.formatToMinutesAndSeconds()
         binding.trackYear.text = track.releaseDate.substring(0, 4)
         binding.trackGenre.text = track.primaryGenreName
         binding.countryTrack.text = track.country
@@ -115,24 +134,32 @@ class PlayerActivity : AppCompatActivity() {
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"))
             .centerCrop()
-            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.icons_padding_hint)))
+            .transform(
+                RoundedCorners(
+                    dpToPx(
+                        cornerRadius,
+                        applicationContext
+                    )
+                )
+            )
+            //.transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.icons_padding_hint)))
             .placeholder(R.drawable.placeholder)
             .into(binding.albumPicture)
     }
 
-    private fun render(state: PlayerStateInterface) {
+    private fun render(state: PlayerState) {
         when (state) {
-            is PlayerStateInterface.Prepare -> prepare()
-            is PlayerStateInterface.Play -> play()
-            is PlayerStateInterface.Pause -> pause()
-            is PlayerStateInterface.UpdatePlayingTime -> updatePlayingTime(state.time)
+            is PlayerState.Prepare -> prepare()
+            is PlayerState.Play -> play()
+            is PlayerState.Pause -> pause()
+            is PlayerState.UpdatePlayingTime -> updatePlayingTime(state.time)
             else -> {}
         }
     }
 
     private fun prepare() {  //??????
         binding.playButton.setImageResource(R.drawable.play_button)
-        binding.progressBar.text = String.format("%02d:%02d", 0, 0)
+        binding.timer.text = String.format("%02d:%02d", 0, 0)
     }
 
     private fun play() {
@@ -156,7 +183,7 @@ class PlayerActivity : AppCompatActivity() {
 
 
     private fun updatePlayingTime(time: String) {
-        binding.progressBar.text = time
+        binding.timer.text = time
     }
 
 
@@ -170,4 +197,12 @@ class PlayerActivity : AppCompatActivity() {
         const val CLICKED_TRACK: String = "clicked_track"
 
     }
+
+
+    fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics
+        ).toInt()
+    }
+
 }

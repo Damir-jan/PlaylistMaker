@@ -68,6 +68,7 @@
             android:maxLines="1"
             android:paddingStart="@dimen/search_editText_padding"
             android:singleLine="true"
+            android:textCursorDrawable="@drawable/cursor"
             android:textColor="@color/black_colors"
             android:textColorHint="@color/search_icon"
             app:cardCornerRadius="@dimen/search_corner_radius"
@@ -194,7 +195,7 @@
                 android:textColor="?attr/colorSecondary"
                 android:textFontWeight="500"
                 android:textSize="14sp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cornerRadius="54dp" />
 
         </LinearLayout>

@@ -7,10 +7,10 @@ interface PlayerInteractor {
 
     var onPlayerCompletion: () -> Unit
 
-    //val playerDuration: Int
-    // val playerCurrentPosition: Int
-    fun getPlayerCurrentPosition(): Int
-    fun getPlayerDuration(): Int
+    val playerDuration: Int
+    val playerCurrentPosition: Int
+    //fun getPlayerCurrentPosition(): Int
+    //fun getPlayerDuration(): Int
 
 
     fun preparePlayer(track: Track)

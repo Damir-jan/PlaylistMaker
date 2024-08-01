@@ -17,13 +17,13 @@ class PlayerRepositoryImpl(
             localOnPlayerCompletion = value
         }
 
-    override fun getCurrentPosition(): Int {
+    /*override fun getCurrentPosition(): Int {
         return mediaPlayer.currentPosition
     }
 
     override fun getDuration(): Int {
         return mediaPlayer.duration
-    }
+    }*/
 
     override val playerDuration: Int
         get() = mediaPlayer.duration
