@@ -4,10 +4,9 @@ import PlayerRepository
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.search.domain.models.Track
 
-class PlayerRepositoryImpl(
-) : PlayerRepository {
+class PlayerRepositoryImpl(  private val mediaPlayer : MediaPlayer)
+ : PlayerRepository {
 
-    private val mediaPlayer = MediaPlayer()
 
     private var localOnPlayerCompletion: () -> Unit = {}
 

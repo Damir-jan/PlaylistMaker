@@ -2,23 +2,19 @@ package com.practicum.playlistmaker.settings.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySettings2Binding
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettings2Binding
-    private lateinit var viewModelSettings: SettingsViewModel //1
+    private val viewModelSettings by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettings2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModelSettings = ViewModelProvider(
-            this,
-            SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]  //2
 
 
         viewModelSettings.getThemeLiveData().observe(this) { isChecked ->

@@ -11,7 +11,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
@@ -20,6 +19,7 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.ui.adapters.TracksAdapter
 import com.practicum.playlistmaker.search.ui.models.SearchTracksState
 import com.practicum.playlistmaker.search.view_model.SearchTracksViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
@@ -31,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchTracksViewModel
+    private val viewModel by viewModel<SearchTracksViewModel>()
     private val handler = Handler(Looper.getMainLooper())
 
     private var isClickAllowed = true
@@ -52,17 +52,9 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(
-            this,
-            SearchTracksViewModel.getViewModelFactory()
-        )[SearchTracksViewModel::class.java]
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(this@SearchActivity) {
             render(it)
         }
-
-        //val setButton = findViewById<ImageButton>(R.id.back)
-        //val clearButton = findViewById<ImageView>(R.id.clearIcon)
-        //inputEditText = findViewById(R.id.search_line)
 
 
         binding.dataTracks.adapter = searchAdapter
@@ -152,30 +144,6 @@ class SearchActivity : AppCompatActivity() {
         }
 
 
-        /*val sharedPreferences = getSharedPreferences(SEARCH_HISTORY_PREFERENCES, MODE_PRIVATE)
-        searchHistory = SearchHistory(sharedPreferences)
-
-        recView.adapter = TracksAdapter(tracksList, currentTrackClickListener)
-
-
-        tracksHistoryList = findViewById(R.id.tracksHistoryList)
-        tracksHistoryList.layoutManager = LinearLayoutManager(this)
-
-        val historyTracks = searchHistory.readTracks().toMutableList()
-
-        historyAdapter = TracksAdapter(historyTracks, historyTrackClickListener)
-        tracksHistoryList.adapter = historyAdapter
-
-        tracksHistoryList.adapter?.notifyDataSetChanged()
-
-        cleanHistoryButton = findViewById(R.id.cleanHistory)
-        cleanHistoryButton.setOnClickListener {
-            historyTracks.clear()
-            sharedPreferences.edit().remove(HISTORY_TRACKS_LIST_KEY).apply()
-            historyLayout.visibility = View.GONE
-            tracksHistoryList.adapter?.notifyDataSetChanged()
-        }
-*/
 
     }
 
@@ -214,7 +182,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             is SearchTracksState.Error -> showError(state.errorMessage)
-            is SearchTracksState.Empty -> showEmpty(state.message)
+            is SearchTracksState.Empty -> showEmpty()
             is SearchTracksState.History -> showHistory()
 
             else -> {}
@@ -244,7 +212,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEmpty(emptyMessage: String) {
+    private fun showEmpty() {
         with(binding) {
             progressBar.visibility = View.GONE
             historyLayout.visibility = View.GONE
@@ -253,7 +221,7 @@ class SearchActivity : AppCompatActivity() {
             placeholderMessage.visibility = View.VISIBLE
 
             placeholderImage.setImageResource(R.drawable.nothing_to_find)
-            placeholderMessage.text = emptyMessage
+            placeholderMessage.setText(R.string.nothing_to_find)
         }
     }
 

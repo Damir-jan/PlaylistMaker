@@ -10,7 +10,6 @@ import com.practicum.playlistmaker.sharing.domain.model.EmailData
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
 
-    private val emailData = EmailData() ///////////add
 
     override fun shareLink() {
         context.startActivity(
@@ -38,7 +37,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun openEmail() {
         context.startActivity(
             Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse(emailData.mailTo)
+                data = Uri.parse(Companion.emailData.mailTo)
                 putExtra(Intent.EXTRA_TEXT, context.getString(R.string.write_support))
                 putExtra(
                     Intent.EXTRA_EMAIL,
@@ -48,5 +47,9 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
         )
+    }
+
+    private companion object {
+        val emailData = EmailData()
     }
 }

@@ -4,13 +4,13 @@ import com.practicum.playlistmaker.Resource
 import com.practicum.playlistmaker.search.NetworkClient
 import com.practicum.playlistmaker.search.data.dto.SearchResponse
 import com.practicum.playlistmaker.search.data.dto.TrackRequest
-import com.practicum.playlistmaker.search.data.preferences.SharedPreferencesSearchClientImpl
+import com.practicum.playlistmaker.search.data.preferences.SharedPreferencesSearchClient
 import com.practicum.playlistmaker.search.domain.api.SearchRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val sharedPreferencesSearchClient: SharedPreferencesSearchClientImpl
+    private val sharedPreferencesSearchClient: SharedPreferencesSearchClient
 ) : SearchRepository {
 
 
@@ -49,7 +49,7 @@ class SearchRepositoryImpl(
         sharedPreferencesSearchClient.saveTrackToHistory(track)
     }
 
-    override fun readTracksFromHistory(): Array<Track> {
+    override fun readTracksFromHistory(): List<Track> {
         return sharedPreferencesSearchClient.readTracksFromHistory()
     }
 

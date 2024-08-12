@@ -3,12 +3,13 @@ package com.practicum.playlistmaker.search.data.preferences
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.search.domain.models.Track
 
 const val HISTORY_TRACKS_LIST_KEY = "history_tracks_list"
 const val maxCountOfTracksInHistory = 10
 
-class SharedPreferencesSearchClientImpl(private val sharedPreferences: SharedPreferences) :
+class SharedPreferencesSearchClientImpl(private val sharedPreferences: SharedPreferences, private val gson : Gson) :
     SharedPreferencesSearchClient {
 
     override fun saveTrackToHistory(track: List<Track>) {
@@ -25,16 +26,16 @@ class SharedPreferencesSearchClientImpl(private val sharedPreferences: SharedPre
             historyTracks.removeAt(maxCountOfTracksInHistory)
         }
 
-        val json = Gson().toJson(historyTracks)
+        val json = gson.toJson(historyTracks)
         sharedPreferences.edit()
             .putString(HISTORY_TRACKS_LIST_KEY, json)
             .apply()
     }
 
-    override fun readTracksFromHistory(): Array<Track> {
-        val json = sharedPreferences.getString(HISTORY_TRACKS_LIST_KEY, null) ?: return emptyArray()
+    override fun readTracksFromHistory(): List<Track> {
+        val json = sharedPreferences.getString(HISTORY_TRACKS_LIST_KEY, null) ?: return emptyList()
         Log.d("Test", "Читаю трек")
-        return Gson().fromJson(json, Array<Track>::class.java)
+        return gson.fromJson(json, object : TypeToken<List<Track>>() {}.type)
     }
 
     override fun clearHistory() {
