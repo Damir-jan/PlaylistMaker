@@ -19,12 +19,12 @@ val interactorModule = module {
         PlayerInteractorImpl(playerRepository = get())
     }
 
-    single<SettingsInteractor> {
+    factory<SettingsInteractor> {
 
         SettingsInteractorImpl(settingsRepository = get())
     }
 
-    single<SharingInteractor> {
+    factory<SharingInteractor> {
         SharingInteractorImpl(externalNavigator = get())
     }
 }

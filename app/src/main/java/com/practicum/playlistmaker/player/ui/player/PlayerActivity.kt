@@ -61,42 +61,6 @@ class PlayerActivity : AppCompatActivity() {
             viewModel.playbackControl()
         }
     }
-    /*
-        binding.trackName.text = track.trackName
-        binding.artistName.text = track.artistName
-        binding.trackTime.text = track.trackTimeMillis.formatToMinutesAndSeconds()
-        binding.progressBar.text = track.trackTimeMillis.formatToMinutesAndSeconds()
-        binding.playButton.setImageResource(R.drawable.play_button)
-        binding.playButton.setBackgroundColor(
-            ContextCompat.getColor(
-                this,
-                android.R.color.transparent
-            )
-        )
-
-        if (track.collectionName.isNullOrEmpty()) {
-            binding.trackAlbum.visibility = View.GONE
-            binding.album.visibility = View.GONE
-        } else {
-            binding.trackAlbum.text = track.collectionName
-        }
-
-        binding.trackYear.text = track.releaseDate.substring(0, 4)
-        binding.trackGenre.text = track.primaryGenreName
-        binding.countryTrack.text = track.country
-
-        Glide.with(this)
-            .load(track.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"))
-            .centerCrop()
-            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.icons_padding_hint)))
-            .placeholder(R.drawable.placeholder)
-            .into(binding.albumPicture)
-
-        binding.back.setOnClickListener { finish() }
-
-        binding.playButton.setOnClickListener {
-            viewModel.playbackControl()
-        }*/
 
     private fun setupUI(track: Track) {
 
@@ -139,7 +103,6 @@ class PlayerActivity : AppCompatActivity() {
                     )
                 )
             )
-            //.transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.icons_padding_hint)))
             .placeholder(R.drawable.placeholder)
             .into(binding.albumPicture)
     }

@@ -16,7 +16,7 @@ val repositoryModule = module {
     single<SearchRepository> {
         SearchRepositoryImpl(networkClient = get(), sharedPreferencesSearchClient = get())
     }
-    single<PlayerRepository> {
+    factory<PlayerRepository> {
         PlayerRepositoryImpl(mediaPlayer = get())
     }
 

@@ -79,8 +79,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.historyLayout.visibility =
                     if (historyTracks.isNotEmpty()) {
                         View.VISIBLE
-                    }
-                    else View.GONE
+                    } else View.GONE
             } else {
                 binding.historyLayout.visibility = View.GONE
             }
@@ -142,7 +141,6 @@ class SearchActivity : AppCompatActivity() {
             binding.historyLayout.visibility = View.GONE
             historyAdapter.notifyDataSetChanged()
         }
-
 
 
     }
@@ -261,6 +259,7 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
+
     private fun showHistory() {
         with(binding) {
             tracksHistoryList.visibility = View.VISIBLE
