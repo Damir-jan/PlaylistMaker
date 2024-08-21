@@ -8,6 +8,6 @@ interface SearchRepository {
 
     fun searchTracks(text: String): Resource<List<Track>>
     fun saveTrackToHistory(track: List<Track>)
-    fun readTracksFromHistory(): Array<Track>
+    fun readTracksFromHistory(): List<Track>
     fun clearHistory()
 }

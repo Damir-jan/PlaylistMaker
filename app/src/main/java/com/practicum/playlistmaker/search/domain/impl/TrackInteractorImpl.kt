@@ -4,11 +4,10 @@ import com.practicum.playlistmaker.Resource
 import com.practicum.playlistmaker.search.domain.api.SearchRepository
 import com.practicum.playlistmaker.search.domain.api.TrackInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
-import java.util.concurrent.Executors
+import java.util.concurrent.Executor
 
-class TrackInteractorImpl(private val repository: SearchRepository) : TrackInteractor {
-
-    private val executor = Executors.newCachedThreadPool()
+class TrackInteractorImpl(private val repository: SearchRepository, private val executor: Executor) :
+    TrackInteractor {
 
     override fun searchTracks(text: String, consumer: TrackInteractor.TrackConsumer) {
         executor.execute {
@@ -28,7 +27,7 @@ class TrackInteractorImpl(private val repository: SearchRepository) : TrackInter
         repository.saveTrackToHistory(track)
     }
 
-    override fun readTracksFromHistory(): Array<Track> {
+    override fun readTracksFromHistory(): List<Track> {
         return repository.readTracksFromHistory()
     }
 

@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
@@ -15,13 +14,14 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.ui.models.PlayerState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +30,7 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory()
-        )[PlayerViewModel::class.java]
+
         viewModel.observeState().observe(this) {
             render(it)
         }
@@ -64,42 +61,6 @@ class PlayerActivity : AppCompatActivity() {
             viewModel.playbackControl()
         }
     }
-    /*
-        binding.trackName.text = track.trackName
-        binding.artistName.text = track.artistName
-        binding.trackTime.text = track.trackTimeMillis.formatToMinutesAndSeconds()
-        binding.progressBar.text = track.trackTimeMillis.formatToMinutesAndSeconds()
-        binding.playButton.setImageResource(R.drawable.play_button)
-        binding.playButton.setBackgroundColor(
-            ContextCompat.getColor(
-                this,
-                android.R.color.transparent
-            )
-        )
-
-        if (track.collectionName.isNullOrEmpty()) {
-            binding.trackAlbum.visibility = View.GONE
-            binding.album.visibility = View.GONE
-        } else {
-            binding.trackAlbum.text = track.collectionName
-        }
-
-        binding.trackYear.text = track.releaseDate.substring(0, 4)
-        binding.trackGenre.text = track.primaryGenreName
-        binding.countryTrack.text = track.country
-
-        Glide.with(this)
-            .load(track.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"))
-            .centerCrop()
-            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.icons_padding_hint)))
-            .placeholder(R.drawable.placeholder)
-            .into(binding.albumPicture)
-
-        binding.back.setOnClickListener { finish() }
-
-        binding.playButton.setOnClickListener {
-            viewModel.playbackControl()
-        }*/
 
     private fun setupUI(track: Track) {
 
@@ -142,7 +103,6 @@ class PlayerActivity : AppCompatActivity() {
                     )
                 )
             )
-            //.transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.icons_padding_hint)))
             .placeholder(R.drawable.placeholder)
             .into(binding.albumPicture)
     }

@@ -1,42 +1,27 @@
 package com.practicum.playlistmaker.search.view_model
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.creator.SearchCreator
+import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.search.domain.api.TrackInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.ui.models.SearchTracksState
 
 class SearchTracksViewModel(
-    application: Application,
-) : AndroidViewModel(application) {
+    private val trackInteractor: TrackInteractor,
+) : ViewModel() {
 
-    private val state = MutableLiveData<SearchTracksState>()
 
     companion object {
         const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
 
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchTracksViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
+
     }
 
-    private val trackInteractor =
-        SearchCreator.provideTrackInteractor(getApplication<Application>())
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -89,22 +74,16 @@ class SearchTracksViewModel(
                 }
                 when {
                     errorMessage != null -> {
-                        Log.d("TEST", "errorMessage")
                         renderState(
                             SearchTracksState.Error(
-                                errorMessage = getApplication<Application>().getString(R.string.noInternetError)
+                                errorMessage //= getApplication<Application>().getString(R.string.noInternetError)
                             )
                         )
                     }
 
                     foundTracks?.isEmpty() == true -> {
-                        Log.d("TEST", "isEmpty")
                         renderState(
-                            SearchTracksState.Empty(
-                                message = getApplication<Application>().getString(
-                                    R.string.nothingToFind
-                                )
-                            )
+                            SearchTracksState.Empty
                         )
                     }
 
@@ -129,7 +108,7 @@ class SearchTracksViewModel(
         trackInteractor.saveTrackToHistory(track)
     }
 
-    fun readTracksFromHistory(): Array<Track> {
+    fun readTracksFromHistory(): List<Track> {
         return trackInteractor.readTracksFromHistory()
     }
 

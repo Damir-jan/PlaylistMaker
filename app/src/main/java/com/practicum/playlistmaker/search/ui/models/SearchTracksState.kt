@@ -14,9 +14,7 @@ sealed interface SearchTracksState {
         val errorMessage: String
     ) : SearchTracksState
 
-    data class Empty(
-        val message: String
-    ) : SearchTracksState
+    object Empty : SearchTracksState
 
     data class History(
         val tracks: MutableList<Track>

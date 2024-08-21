@@ -1,15 +1,17 @@
 package com.practicum.playlistmaker
 
-import PlayerRepository
 import android.app.Application
-import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmaker.player.data.repositoryImpl.PlayerRepositoryImpl
-import com.practicum.playlistmaker.player.domain.InteractorImpl.PlayerInteractorImpl
-import com.practicum.playlistmaker.player.domain.interactor.PlayerInteractor
+import com.practicum.playlistmaker.di.dataModule
+import com.practicum.playlistmaker.di.interactorModule
+import com.practicum.playlistmaker.di.repositoryModule
+import com.practicum.playlistmaker.di.viewModelModule
+import com.practicum.playlistmaker.settings.domain.SettingsInteractor
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext.startKoin
 
 const val PLAYLIST_MAKER_THEME = "playlist_maker_theme_preferences"
-const val NIGHT_THEM_KEY = "night_theme"
 
 
 class App : Application() {
@@ -18,31 +20,21 @@ class App : Application() {
         getSharedPreferences(PLAYLIST_MAKER_THEME, MODE_PRIVATE)
     }
 
-    private val mediaPlayer: MediaPlayer = MediaPlayer()
-    private val playerRepository: PlayerRepository = PlayerRepositoryImpl()
-    private val playerInteractor: PlayerInteractor = PlayerInteractorImpl(playerRepository)
-
-    fun getPlayerInteractor() = playerInteractor
-    fun getPlayerRepository() = playerRepository
-
-
     var darkTheme = false
 
     override fun onCreate() {
         super.onCreate()
-        darkTheme = getThemSharedPreferences()
+
+        startKoin {
+            androidContext(this@App)
+            modules(listOf(dataModule, repositoryModule, interactorModule, viewModelModule))
+        }
+        val settingsInteractor : SettingsInteractor by inject()
+
+        darkTheme = settingsInteractor.getThemeSettings().darkTheme
         switchTheme(darkTheme)
     }
 
-    private fun getThemSharedPreferences(): Boolean {
-        return sharedPrefs.getBoolean(NIGHT_THEM_KEY, false)
-    }
-
-    fun saveThemeToSharedPreferences() {
-        sharedPrefs.edit()
-            .putBoolean(NIGHT_THEM_KEY, darkTheme)
-            .apply()
-    }
 
 
     fun switchTheme(darkThemeEnabled: Boolean) {

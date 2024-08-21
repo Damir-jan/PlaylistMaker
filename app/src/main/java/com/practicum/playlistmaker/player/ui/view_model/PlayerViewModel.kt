@@ -1,40 +1,31 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.player.creator.PlayerCreator
+import androidx.lifecycle.ViewModel
+import com.practicum.playlistmaker.player.domain.interactor.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerState
 import com.practicum.playlistmaker.search.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
-    application: Application,
-) : AndroidViewModel(application) {
+    private val playerInteractor : PlayerInteractor
+) : ViewModel() {
 
 
-    companion object {
+    private companion object {
         const val DELAY = 500L
         const val TRACK_FINISH = 29_900L
         const val MISTAKE = "Mistake"
 
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
+
     }
 
-    private val playerInteractor =
-        PlayerCreator.providePlayerInteractor()
+
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
