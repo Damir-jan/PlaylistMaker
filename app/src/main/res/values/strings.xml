@@ -10,6 +10,7 @@
     <string name="terms_of_use" translatable="false">Пользовательское соглашение</string>
     <string name="todo" translatable="false">TODO</string>
     <string name="search" translatable="false">Поиск</string>
+    <string name="mediateka" translatable="false">Медиатека</string>
     <string name="courseURL" translatable="false">https://practicum.yandex.ru/profile/android-developer/</string>
     <string name="supportEmail" translatable="false">damgaripov1@yandex.ru</string>
     <string name="supportSubject" translatable="false">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
@@ -31,6 +32,12 @@
     <string name="like" translatable="false">Понравилось</string>
     <string name="Add" translatable="false">Добавить</string>
     <string name="play" translatable="false">Воспроизвести</string>
+    <string name="favouriteTracks" translatable="false">Избранные треки</string>
+    <string name="playlist" translatable="false">Плейлисты</string>
+    <string name="playlistUI" translatable="false">Вы не создали ни одного плейлиста</string>
+    <string name="favouriteTracksUI" translatable="false">Ваша медиатека пуста</string>
+
+
 
 
 

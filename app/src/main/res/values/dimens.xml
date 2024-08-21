@@ -22,6 +22,7 @@
     <dimen name="margin_28dp">28dp</dimen>
     <dimen name="settings_indentation_right">44dp</dimen>
     <dimen name="settings_text_padding_right">44dp</dimen>
+    <dimen name="margin_46dp">46dp</dimen>
     <dimen name="header_height">48dp</dimen>
     <dimen name="indent_right">52dp</dimen>
     <dimen name="layot_height">56dp</dimen>
