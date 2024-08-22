@@ -35,6 +35,11 @@
     <dimen name="search_margin_vertical">8.5dp</dimen>
     <dimen name="icons_padding_hint">8dp</dimen>
 
+    <!-- это медиатека -->
+    <dimen name="text_size_mediateka">19sp</dimen>
+    <dimen name="margin_106">106dp</dimen>
+    <dimen name="text_size_mediateka_button">14sp</dimen>
+    <dimen name="radius">54sp</dimen>
 
 </resources>
 
