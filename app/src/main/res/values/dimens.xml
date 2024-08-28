@@ -22,6 +22,7 @@
     <dimen name="margin_28dp">28dp</dimen>
     <dimen name="settings_indentation_right">44dp</dimen>
     <dimen name="settings_text_padding_right">44dp</dimen>
+    <dimen name="margin_46dp">46dp</dimen>
     <dimen name="header_height">48dp</dimen>
     <dimen name="indent_right">52dp</dimen>
     <dimen name="layot_height">56dp</dimen>
@@ -34,6 +35,11 @@
     <dimen name="search_margin_vertical">8.5dp</dimen>
     <dimen name="icons_padding_hint">8dp</dimen>
 
+    <!-- это медиатека -->
+    <dimen name="text_size_mediateka">19sp</dimen>
+    <dimen name="margin_106">106dp</dimen>
+    <dimen name="text_size_mediateka_button">14sp</dimen>
+    <dimen name="radius">54sp</dimen>
 
 </resources>
 
