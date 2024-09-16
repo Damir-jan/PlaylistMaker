@@ -27,6 +27,7 @@
     <dimen name="indent_right">52dp</dimen>
     <dimen name="layot_height">56dp</dimen>
     <dimen name="settings_items_height">61dp</dimen>
+    <dimen name="dividerThickness">0.5dp</dimen>
 
     <!-- это окно поиска -->
     <dimen name="search_margin_horizontal">16dp</dimen>

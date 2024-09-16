@@ -36,12 +36,8 @@
     <string name="playlist" translatable="false">Плейлисты</string>
     <string name="playlistUI" translatable="false">Вы не создали ни одного плейлиста</string>
     <string name="favouriteTracksUI" translatable="false">Ваша медиатека пуста</string>
-
-
-
-
-
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
