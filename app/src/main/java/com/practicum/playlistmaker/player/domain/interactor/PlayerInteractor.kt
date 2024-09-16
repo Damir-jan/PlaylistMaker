@@ -9,9 +9,6 @@ interface PlayerInteractor {
 
     val playerDuration: Int
     val playerCurrentPosition: Int
-    //fun getPlayerCurrentPosition(): Int
-    //fun getPlayerDuration(): Int
-
 
     fun preparePlayer(track: Track)
     fun startPlayer()

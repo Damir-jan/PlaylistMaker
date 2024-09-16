@@ -13,7 +13,10 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
@@ -22,6 +25,7 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.ui.adapters.TracksAdapter
 import com.practicum.playlistmaker.search.ui.models.SearchTracksState
 import com.practicum.playlistmaker.search.view_model.SearchTracksViewModel
+import debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -32,6 +36,8 @@ class SearchFragment : Fragment() {
         const val CLICKED_TRACK: String = "clicked_track"
         const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
+    private lateinit var onMusicClickDebounce: (Track) -> Unit
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -77,6 +83,17 @@ class SearchFragment : Fragment() {
                 viewModel.searchTrack(binding.searchLine.text.toString())
             }
             false
+        }
+
+        onMusicClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { clickedTrack ->
+            viewModel.onClickedTrack(listOf(clickedTrack))
+            historyAdapter.notifyDataSetChanged()
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerActivity,
+                bundleOf(CLICKED_TRACK to clickedTrack)
+            )
         }
 
         binding.searchLine.setOnFocusChangeListener { _, hasFocus ->
