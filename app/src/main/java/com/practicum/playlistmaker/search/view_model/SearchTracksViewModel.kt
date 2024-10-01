@@ -62,7 +62,7 @@ class SearchTracksViewModel(
                 .collect { pair ->
                     processResult(pair.first, pair.second)
                 }
-            }
+        }
 
     }
 
@@ -107,14 +107,19 @@ class SearchTracksViewModel(
     }
 
     private fun saveTrackToHistory(track: List<Track>) {
-        trackInteractor.saveTrackToHistory(track)
+        viewModelScope.launch {
+            trackInteractor.saveTrackToHistory(track)
+        }
     }
 
-    fun readTracksFromHistory(): List<Track> {
-        return trackInteractor.readTracksFromHistory()
+
+        suspend fun readTracksFromHistory(): List<Track> {
+            return trackInteractor.readTracksFromHistory()  //здесь сейчас ошибка, так как функция должна быть suspend
+        }
+
+        fun clearHistory() {
+            trackInteractor.clearHistory()
+        }
     }
 
-    fun clearHistory() {
-        trackInteractor.clearHistory()
-    }
-}
+

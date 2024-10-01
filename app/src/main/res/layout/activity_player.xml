@@ -100,7 +100,7 @@
         android:id="@+id/likeButton"
         android:layout_width="51dp"
         android:layout_height="51dp"
-        android:background="@drawable/like_button"
+        android:background="@null"
         app:layout_constraintTop_toTopOf="@id/playButton"
         app:layout_constraintBottom_toBottomOf="@id/playButton"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"

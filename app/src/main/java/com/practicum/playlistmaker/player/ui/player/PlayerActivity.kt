@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.player.ui.player
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +16,6 @@ import com.practicum.playlistmaker.player.ui.models.PlayerState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -31,9 +30,6 @@ class PlayerActivity : AppCompatActivity() {
 
 
 
-        viewModel.observeState().observe(this) {
-            render(it)
-        }
 
         val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra(CLICKED_TRACK) as? Track
@@ -55,23 +51,38 @@ class PlayerActivity : AppCompatActivity() {
             binding.timer.text = progress.toString()
         }
 
+        if (track != null) {
+            viewModel.initLikeButton(track.isFavorite)
+        }
+        viewModel.observeState().observe(this) {
+            render(it)
+        }
+
+        viewModel.observeFavoriteState().observe(this) {
+            renderLikeButton(it)
+        }
+
         binding.back.setOnClickListener { finish() }
 
         binding.playButton.setOnClickListener {
             viewModel.playbackControl()
+        }
+        binding.likeButton.setOnClickListener {
+            if (track != null) {
+                viewModel.onFavoriteClicked(track)
+            }
         }
     }
 
     private fun setupUI(track: Track) {
 
         val cornerRadius = 8f
-        val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
         val releaseYear = track.releaseDate.substring(0, 4)
 
 
         binding.trackName.text = track.trackName
         binding.artistName.text = track.artistName
-        binding.timer.text = track.trackTimeMillis.formatToMinutesAndSeconds()
+        binding.timer.text = viewModel.setStartTime()
 
         binding.playButton.setBackgroundColor(
             ContextCompat.getColor(
@@ -87,7 +98,7 @@ class PlayerActivity : AppCompatActivity() {
             binding.trackAlbum.text = track.collectionName
         }
 
-        binding.trackTime.text = track.trackTimeMillis.formatToMinutesAndSeconds()
+        binding.trackTime.text = track.trackTime
         binding.trackYear.text = track.releaseDate.substring(0, 4)
         binding.trackGenre.text = track.primaryGenreName
         binding.countryTrack.text = track.country
@@ -109,7 +120,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun render(state: PlayerState) {
         when (state) {
-            is PlayerState.Prepare -> prepare()
+            is PlayerState.Prepare -> prepare(state.track)
             is PlayerState.Play -> play()
             is PlayerState.Pause -> pause()
             is PlayerState.UpdatePlayingTime -> updatePlayingTime(state.time)
@@ -117,9 +128,10 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun prepare() {  //??????
+    private fun prepare(track: Track) {  //??????
         binding.playButton.setImageResource(R.drawable.play_button)
         binding.timer.text = String.format("%02d:%02d", 0, 0)
+        renderLikeButton(track.isFavorite)
     }
 
     private fun play() {
@@ -163,6 +175,17 @@ class PlayerActivity : AppCompatActivity() {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics
         ).toInt()
+    }
+
+    private fun renderLikeButton(isFavorite: Boolean) {
+        val imageResource =
+            if (isFavorite) {
+                R.drawable.like_button
+            } else {
+                R.drawable.dislike_button
+            }
+        binding.likeButton.setImageResource(imageResource)
+        Log.d("dataBase", "updateFavoriteButton ${isFavorite}")
     }
 
 }
