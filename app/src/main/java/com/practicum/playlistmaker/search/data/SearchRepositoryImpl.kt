@@ -7,6 +7,8 @@ import com.practicum.playlistmaker.search.data.dto.TrackRequest
 import com.practicum.playlistmaker.search.data.preferences.SharedPreferencesSearchClient
 import com.practicum.playlistmaker.search.domain.api.SearchRepository
 import com.practicum.playlistmaker.search.domain.models.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -14,15 +16,15 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
 
 
-    override fun searchTracks(text: String): Resource<List<Track>> {
+    override fun searchTracks(text: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TrackRequest(text))
-        return when (response.resultCode) {
+        when (response.resultCode) {
             -1 -> {
-                Resource.Error("Нет интернета")
+                emit(Resource.Error("Нет интернета"))
             }
 
             200 -> {
-                Resource.Success((response as SearchResponse).results.map {
+                emit(Resource.Success((response as SearchResponse).results.map {
                     Track(
                         it.trackId,
                         it.trackName,
@@ -35,12 +37,12 @@ class SearchRepositoryImpl(
                         it.country,
                         it.previewUrl
                     )
-                })
+                }))
             }
 
             else -> {
 
-                Resource.Error("Ошибка сервера")
+                emit(Resource.Error("Ошибка сервера"))
             }
         }
     }

@@ -15,13 +15,6 @@ class PlayerInteractorImpl(
             playerRepository.onPlayerCompletion = value
         }
 
-   /* override fun getPlayerCurrentPosition(): Int {
-        return playerRepository.getCurrentPosition()
-    }
-
-    override fun getPlayerDuration(): Int {
-        return playerRepository.getDuration()
-    }*/
 
     override val playerDuration: Int
     get() = playerRepository.playerDuration

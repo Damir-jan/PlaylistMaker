@@ -14,8 +14,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 
 private const val SEARCH_HISTORY_PREFERENCES = "playlist_maker_search_history_preferences"
@@ -50,9 +48,6 @@ val dataModule = module {
         RetrofitNetworkClient(get(), androidContext())
     }
 
-    single<Executor> {
-        Executors.newCachedThreadPool()
-    }
 
     factory <MediaPlayer> {
         MediaPlayer()
