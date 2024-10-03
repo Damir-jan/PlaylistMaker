@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -26,6 +27,7 @@ import com.practicum.playlistmaker.search.ui.adapters.TracksAdapter
 import com.practicum.playlistmaker.search.ui.models.SearchTracksState
 import com.practicum.playlistmaker.search.view_model.SearchTracksViewModel
 import debounce
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -98,14 +100,13 @@ class SearchFragment : Fragment() {
 
         binding.searchLine.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.searchLine.text.isEmpty()) {
-                val historyTracks = viewModel.readTracksFromHistory().toMutableList()
-                historyAdapter.setData(historyTracks)
-                binding.historyLayout.visibility =
-                    if (historyTracks.isNotEmpty()) {
-                        View.VISIBLE
-                    } else View.GONE
+                lifecycleScope.launch {
+                    val historyTracks = viewModel.readTracksFromHistory().toMutableList()   ///////1
+                    historyAdapter.setData(historyTracks)
+                    binding.historyLayout.isVisible = historyTracks.isNotEmpty()
+                }
             } else {
-                binding.historyLayout.visibility = View.GONE
+                binding.historyLayout.isVisible = false
             }
         }
 
@@ -156,8 +157,10 @@ class SearchFragment : Fragment() {
         }
 
         binding.cleanHistory.setOnClickListener {
-            val historyTracks = viewModel.readTracksFromHistory().toMutableList()
-            historyTracks.clear()
+            lifecycleScope.launch {
+                val historyTracks = viewModel.readTracksFromHistory().toMutableList()  ///////2
+                historyTracks.clear()
+            }
             viewModel.clearHistory()
             binding.historyLayout.visibility = View.GONE
             historyAdapter.notifyDataSetChanged()

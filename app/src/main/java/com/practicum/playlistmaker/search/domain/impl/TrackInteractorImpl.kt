@@ -23,11 +23,11 @@ class TrackInteractorImpl(private val repository: SearchRepository) : TrackInter
         }
     }
 
-    override fun saveTrackToHistory(track: List<Track>) {
+    override suspend fun saveTrackToHistory(track: List<Track>) {
         repository.saveTrackToHistory(track)
     }
 
-    override fun readTracksFromHistory(): List<Track> {
+    override suspend fun readTracksFromHistory(): List<Track> {
         return repository.readTracksFromHistory()
     }
 

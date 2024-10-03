@@ -21,11 +21,13 @@ class TrackItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val asTrackName: TextView = itemView.findViewById(R.id.as_TrackName)
         private val imageView: ImageView = itemView.findViewById(R.id.image_album)
 
+    private val dateFormat by lazy{SimpleDateFormat("mm:ss", Locale.getDefault())}
+
 
     fun bind(model: Track) {
         asTrackName.text = model.trackName
         textViewFirst.text = model.artistName
-        textViewSecond.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
+        textViewSecond.text = model.trackTime
 
         Glide.with(itemView.context)
             .load(model.artworkUrl100)

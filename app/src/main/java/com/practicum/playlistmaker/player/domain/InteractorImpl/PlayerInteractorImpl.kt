@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.player.domain.InteractorImpl
 
-import PlayerRepository
 import com.practicum.playlistmaker.player.domain.interactor.PlayerInteractor
+import com.practicum.playlistmaker.player.domain.repository.PlayerRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 
 class PlayerInteractorImpl(
@@ -21,8 +21,12 @@ class PlayerInteractorImpl(
     override val playerCurrentPosition: Int
     get() = playerRepository.playerCurrentPosition
 
-    override fun preparePlayer(track: Track) {
-        playerRepository.preparePlayer(track)
+    override fun preparePlayer(
+        track: Track,
+        onPreparedListener: () -> Unit,
+        onPlayerCompletion: () -> Unit
+    ) {
+        playerRepository.preparePlayer(track, onPreparedListener, onPlayerCompletion)
     }
 
     override fun startPlayer() {
