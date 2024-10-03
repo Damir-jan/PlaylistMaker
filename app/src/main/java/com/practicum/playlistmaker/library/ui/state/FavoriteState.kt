@@ -10,4 +10,5 @@ sealed interface FavoriteState {
     data class Empty(
         val message: String
     ) : FavoriteState
+
 }

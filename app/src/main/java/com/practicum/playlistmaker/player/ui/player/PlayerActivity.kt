@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.player.ui.player
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -38,10 +37,7 @@ class PlayerActivity : AppCompatActivity() {
             intent.getSerializableExtra(CLICKED_TRACK) as? Track
         }
 
-        track?.let {
-            viewModel.preparePlayer(it)
-            setupUI(it)
-        }
+
 
         viewModel.observeState().observe(this) { state ->
             render(state)
@@ -52,14 +48,16 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         if (track != null) {
-            viewModel.initLikeButton(track.isFavorite)
+            setupUI(track)
+            viewModel.preparePlayer(track)
         }
         viewModel.observeState().observe(this) {
             render(it)
         }
 
-        viewModel.observeFavoriteState().observe(this) {
-            renderLikeButton(it)
+
+        viewModel.observeFavoriteState().observe(this) { isFavorite ->
+            renderLikeButton(isFavorite)
         }
 
         binding.back.setOnClickListener { finish() }
@@ -77,7 +75,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun setupUI(track: Track) {
 
         val cornerRadius = 8f
-        val releaseYear = track.releaseDate.substring(0, 4)
+
 
 
         binding.trackName.text = track.trackName
@@ -120,7 +118,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun render(state: PlayerState) {
         when (state) {
-            is PlayerState.Prepare -> prepare(state.track)
+            is PlayerState.Prepare -> prepare()
             is PlayerState.Play -> play()
             is PlayerState.Pause -> pause()
             is PlayerState.UpdatePlayingTime -> updatePlayingTime(state.time)
@@ -128,10 +126,10 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun prepare(track: Track) {  //??????
+    private fun prepare() {
         binding.playButton.setImageResource(R.drawable.play_button)
         binding.timer.text = String.format("%02d:%02d", 0, 0)
-        renderLikeButton(track.isFavorite)
+
     }
 
     private fun play() {
@@ -185,7 +183,7 @@ class PlayerActivity : AppCompatActivity() {
                 R.drawable.dislike_button
             }
         binding.likeButton.setImageResource(imageResource)
-        Log.d("dataBase", "updateFavoriteButton ${isFavorite}")
+
     }
 
 }

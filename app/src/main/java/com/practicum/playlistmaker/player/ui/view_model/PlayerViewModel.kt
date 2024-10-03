@@ -8,6 +8,7 @@ import com.practicum.playlistmaker.library.domain.db.FavoritesTrackInteractor
 import com.practicum.playlistmaker.player.domain.interactor.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerState
 import com.practicum.playlistmaker.search.domain.models.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,14 +62,17 @@ class PlayerViewModel(
     }
 
     fun preparePlayer(track: Track) {
-        favoriteLiveData.postValue(track.isFavorite)
+        viewModelScope.launch(Dispatchers.IO) {
+            val isFavorite = favoritesTrackInteractor.isTrackFavorite(track.trackId)
+            favoriteLiveData.postValue(isFavorite)
+        }
         playerInteractor.preparePlayer(
             track,
             onPreparedListener = {
-                renderState(PlayerState.Prepare(track))
+                renderState(PlayerState.Prepare)
             },
             onPlayerCompletion = {
-                renderState(PlayerState.Prepare(track))
+                renderState(PlayerState.Prepare)
                 timerJob?.cancel()
             }
         )
@@ -113,19 +117,17 @@ class PlayerViewModel(
     }
 
     fun onFavoriteClicked(track: Track) {
-        viewModelScope.launch {
-            if (track.isFavorite) {
+        viewModelScope.launch(Dispatchers.IO){
+            if (favoritesTrackInteractor.isTrackFavorite(track.trackId)) {
                 favoritesTrackInteractor.unlikeTrack(track)
+                favoriteLiveData.postValue(false)
             } else {
                 favoritesTrackInteractor.likeTrack(track)
+                favoriteLiveData.postValue(true)
             }
-            track.isFavorite = !track.isFavorite
-            favoriteLiveData.postValue(track.isFavorite)
         }
     }
 
-    fun initLikeButton(isLiked: Boolean) {
-        favoriteLiveData.value = isLiked
-    }
+
 
 }

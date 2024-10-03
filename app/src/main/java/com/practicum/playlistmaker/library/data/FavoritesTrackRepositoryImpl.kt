@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.library.data
 
-import android.util.Log
 import com.practicum.playlistmaker.library.data.converter.TrackDbConvertor
 import com.practicum.playlistmaker.library.data.db.AppDatabase
 import com.practicum.playlistmaker.library.data.db.FavoritesTrackEntity
@@ -16,12 +15,10 @@ class FavoritesTrackRepositoryImpl(
 
     override suspend fun likeTrack(track: Track) {
         appDatabase.favoriteTrackDao().insertFavoriteTrack(convertToTrackEntity(track))
-        Log.d("dataBase","likeTrack ${track.trackId}")
     }
 
     override suspend fun unlikeTrack(track: Track) {
         appDatabase.favoriteTrackDao().deleteFavoriteTrack(convertToTrackEntity(track))
-        Log.d("dataBase","unlikeTrack ${track.trackId}")
     }
 
     override fun getTracks(): Flow<List<Track>> {
@@ -34,5 +31,10 @@ class FavoritesTrackRepositoryImpl(
 
     private fun convertToTrackEntity(track: Track): FavoritesTrackEntity {
         return trackDbConvertor.map(track)
+    }
+
+    override suspend fun isTrackFavorite(trackId: Int): Boolean {
+        val likedIds = appDatabase.favoriteTrackDao().getFavoriteTracksId()
+        return likedIds.contains(trackId)
     }
 }

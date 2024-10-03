@@ -27,8 +27,10 @@ class FavoriteTracksViewModel(
         }
     }
 
-    private val stateLiveData = MutableLiveData<FavoriteState>()
+    private val _stateLiveData = MutableLiveData<FavoriteState>()
     fun observeState(): LiveData<FavoriteState> = stateLiveData
+
+    val stateLiveData: LiveData<FavoriteState> get() = _stateLiveData
 
     private fun processResult(favoriteTracks: List<Track>) {
         if (favoriteTracks.isEmpty()) {
@@ -39,6 +41,8 @@ class FavoriteTracksViewModel(
     }
 
     private fun renderState(state: FavoriteState) {
-        stateLiveData.postValue(state)
+        _stateLiveData.postValue(state)
     }
+
+
 }
