@@ -1,8 +1,12 @@
 package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.library.data.FavoritesTrackRepositoryImpl
+import com.practicum.playlistmaker.library.data.LocalStorageRepositoryImpl
+import com.practicum.playlistmaker.library.data.PlaylistsRepositoryImpl
 import com.practicum.playlistmaker.library.data.converter.TrackDbConvertor
 import com.practicum.playlistmaker.library.domain.repository.FavoritesTrackRepository
+import com.practicum.playlistmaker.library.domain.repository.LocalStorageRepository
+import com.practicum.playlistmaker.library.domain.repository.PlaylistsRepositoty
 import com.practicum.playlistmaker.player.data.repositoryImpl.PlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.repository.PlayerRepository
 import com.practicum.playlistmaker.search.data.SearchRepositoryImpl
@@ -34,5 +38,13 @@ val repositoryModule = module {
 
     single<FavoritesTrackRepository> {
         FavoritesTrackRepositoryImpl(appDatabase = get(), trackDbConvertor = get())
+    }
+
+    single<LocalStorageRepository> {
+        LocalStorageRepositoryImpl(context = androidContext())  //можно передавать context или это чревато утечкой???
+    }
+
+    single<PlaylistsRepositoty> {
+        PlaylistsRepositoryImpl(appDatabase = get())
     }
 }

@@ -3,9 +3,11 @@ package com.practicum.playlistmaker.library.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.practicum.playlistmaker.library.data.dao.FavoritesTrackDao
+import com.practicum.playlistmaker.library.data.dao.PlaylistDao
 
-@Database(version = 1, entities = [FavoritesTrackEntity::class])
+ @Database(version = 3, entities = [FavoritesTrackEntity::class, PlaylistEntity::class])
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun favoriteTrackDao(): FavoritesTrackDao
+    abstract fun getFavoriteTrackDao(): FavoritesTrackDao
+    abstract fun getPlaylistDao(): PlaylistDao
 }
