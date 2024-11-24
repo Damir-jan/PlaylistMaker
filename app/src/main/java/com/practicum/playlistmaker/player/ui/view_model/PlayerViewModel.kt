@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.library.domain.db.FavoritesTrackInteractor
 import com.practicum.playlistmaker.player.domain.interactor.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerState
 import com.practicum.playlistmaker.search.domain.models.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -14,7 +16,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
-    private val playerInteractor : PlayerInteractor
+    private val playerInteractor : PlayerInteractor,
+    private val favoritesTrackInteractor: FavoritesTrackInteractor
 ) : ViewModel() {
 
 
@@ -30,6 +33,9 @@ class PlayerViewModel(
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
 
+    private val favoriteLiveData = MutableLiveData<Boolean>()
+    fun observeFavoriteState(): LiveData<Boolean> = favoriteLiveData
+
 
 
 
@@ -43,7 +49,10 @@ class PlayerViewModel(
     }
 
     private fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerInteractor.playerCurrentPosition) ?: "00:00"
+        return SimpleDateFormat(
+            "mm:ss",
+            Locale.getDefault()
+        ).format(playerInteractor.playerCurrentPosition) ?: "00:00"
     }
 
 
@@ -52,15 +61,23 @@ class PlayerViewModel(
         stateLiveData.postValue(state)
     }
 
-
-     fun preparePlayer(track: Track) {
-        renderState(PlayerState.Prepare)
-        playerInteractor.preparePlayer(track)
-         playerInteractor.onPlayerCompletion  = {
-             renderState(PlayerState.Prepare)
-             timerJob?.cancel()
-         }
+    fun preparePlayer(track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isFavorite = favoritesTrackInteractor.isTrackFavorite(track.trackId)
+            favoriteLiveData.postValue(isFavorite)
+        }
+        playerInteractor.preparePlayer(
+            track,
+            onPreparedListener = {
+                renderState(PlayerState.Prepare)
+            },
+            onPlayerCompletion = {
+                renderState(PlayerState.Prepare)
+                timerJob?.cancel()
+            }
+        )
     }
+
 
 
 
@@ -94,4 +111,23 @@ class PlayerViewModel(
             startPlayer()
         }
     }
+
+    fun setStartTime(): String {
+        return String.format("%02d:%02d", 0, 0)
+    }
+
+    fun onFavoriteClicked(track: Track) {
+        viewModelScope.launch(Dispatchers.IO){
+            if (favoritesTrackInteractor.isTrackFavorite(track.trackId)) {
+                favoritesTrackInteractor.unlikeTrack(track)
+                favoriteLiveData.postValue(false)
+            } else {
+                favoritesTrackInteractor.likeTrack(track)
+                favoriteLiveData.postValue(true)
+            }
+        }
+    }
+
+
+
 }

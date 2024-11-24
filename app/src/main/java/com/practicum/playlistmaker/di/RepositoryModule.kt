@@ -1,7 +1,10 @@
 package com.practicum.playlistmaker.di
 
-import PlayerRepository
+import com.practicum.playlistmaker.library.data.FavoritesTrackRepositoryImpl
+import com.practicum.playlistmaker.library.data.converter.TrackDbConvertor
+import com.practicum.playlistmaker.library.domain.repository.FavoritesTrackRepository
 import com.practicum.playlistmaker.player.data.repositoryImpl.PlayerRepositoryImpl
+import com.practicum.playlistmaker.player.domain.repository.PlayerRepository
 import com.practicum.playlistmaker.search.data.SearchRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.SearchRepository
 import com.practicum.playlistmaker.settings.data.SettingsRepository
@@ -14,7 +17,7 @@ import org.koin.dsl.module
 val repositoryModule = module {
 
     single<SearchRepository> {
-        SearchRepositoryImpl(networkClient = get(), sharedPreferencesSearchClient = get())
+        SearchRepositoryImpl(networkClient = get(), sharedPreferencesSearchClient = get(), appDatabase = get())
     }
     factory<PlayerRepository> {
         PlayerRepositoryImpl(mediaPlayer = get())
@@ -26,5 +29,10 @@ val repositoryModule = module {
 
     single<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
+    }
+    factory { TrackDbConvertor() }
+
+    single<FavoritesTrackRepository> {
+        FavoritesTrackRepositoryImpl(appDatabase = get(), trackDbConvertor = get())
     }
 }
