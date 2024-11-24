@@ -58,7 +58,7 @@ class SearchRepositoryImpl(
         return sharedPreferencesSearchClient.readTracksFromHistory()
             .map { track ->
                 track.copy(
-                    isFavorite = appDatabase.favoriteTrackDao().getFavoriteTracksId()
+                    isFavorite = appDatabase.getFavoriteTrackDao().getFavoriteTracksId()
                         .contains(track.trackId)
                 )
             }

@@ -1,66 +1,83 @@
 package com.practicum.playlistmaker.player.ui.player
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
+import com.practicum.playlistmaker.player.ui.adapters.BottomSheetPlaylistAdapter
 import com.practicum.playlistmaker.player.ui.models.PlayerState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerFragment : Fragment() {
 
-    private lateinit var binding: ActivityPlayerBinding
+    private var _binding: FragmentPlayerBinding? = null
+    private val binding get() = _binding!!
+
+    private var adapter: BottomSheetPlaylistAdapter? = null
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
+    private companion object {
+        const val CLICKED_TRACK: String = "clicked_track"
+    }
+
     private val viewModel by viewModel<PlayerViewModel>()
 
+    private val args: PlayerFragmentArgs by navArgs()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        val track = args.track
 
-
-
-        val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra(CLICKED_TRACK) as? Track
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getSerializableExtra(CLICKED_TRACK) as? Track
-        }
-
-
-
-        viewModel.observeState().observe(this) { state ->
-            render(state)
-        }
-
-        viewModel.progressLiveData.observe(this) { progress ->
-            binding.timer.text = progress.toString()
-        }
-
-        if (track != null) {
-            setupUI(track)
-            viewModel.preparePlayer(track)
-        }
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-
-        viewModel.observeFavoriteState().observe(this) { isFavorite ->
-            renderLikeButton(isFavorite)
+        track?.let {
+            viewModel.preparePlayer(track)
+            setupUI(track)
         }
 
-        binding.back.setOnClickListener { finish() }
+        viewModel.progressLiveData.observe(viewLifecycleOwner) { progress ->
+            binding.timer.text = progress.toString()
+        }
+
+
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+
+        viewModel.observeFavoriteState().observe(viewLifecycleOwner) {
+            renderLikeButton(it)
+        }
+
+        binding.back.setOnClickListener {
+            findNavController().navigateUp() }
 
         binding.playButton.setOnClickListener {
             viewModel.playbackControl()
@@ -69,6 +86,46 @@ class PlayerActivity : AppCompatActivity() {
             if (track != null) {
                 viewModel.onFavoriteClicked(track)
             }
+        }
+        binding.addButton.setOnClickListener {
+            viewModel.getSavedPlaylists()
+            showBottomSheet()
+        }
+
+        adapter = BottomSheetPlaylistAdapter()
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.isVisible = false
+                    }
+
+                    else -> {
+                        binding.overlay.isVisible = true
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                binding.overlay.alpha = slideOffset
+            }
+        })
+
+        viewModel.observePlaylists().observe(viewLifecycleOwner) { playlists ->
+            adapter?.playlists?.clear()
+            adapter?.playlists?.addAll(playlists)
+            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -84,11 +141,10 @@ class PlayerActivity : AppCompatActivity() {
 
         binding.playButton.setBackgroundColor(
             ContextCompat.getColor(
-                this,
+                requireContext(),
                 android.R.color.transparent
             )
         )
-
         if (track.collectionName.isNullOrEmpty()) {
             binding.trackAlbum.visibility = View.GONE
             binding.album.visibility = View.GONE
@@ -100,15 +156,14 @@ class PlayerActivity : AppCompatActivity() {
         binding.trackYear.text = track.releaseDate.substring(0, 4)
         binding.trackGenre.text = track.primaryGenreName
         binding.countryTrack.text = track.country
-
-        Glide.with(this)
+        Glide.with(requireContext())
             .load(track.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"))
             .centerCrop()
             .transform(
                 RoundedCorners(
                     dpToPx(
                         cornerRadius,
-                        applicationContext
+                        requireContext()
                     )
                 )
             )
@@ -126,48 +181,33 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun prepare() {
+    private fun prepare() {  //??????
         binding.playButton.setImageResource(R.drawable.play_button)
         binding.timer.text = String.format("%02d:%02d", 0, 0)
-
     }
 
     private fun play() {
         binding.playButton.setImageResource(R.drawable.pause)
     }
-
     private fun pause() {
         binding.playButton.setImageResource(R.drawable.play_button)
     }
-
-
     override fun onPause() {
         super.onPause()
         viewModel.pausePlayer()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         viewModel.releasePlayer()
     }
-
-
     private fun updatePlayingTime(time: String) {
         binding.timer.text = time
     }
-
-
     private fun Long.formatToMinutesAndSeconds(): String {
         val minutes = this / 60000
         val seconds = (this % 60000) / 1000
         return "%02d:%02d".format(minutes, seconds)
     }
-
-    private companion object {
-        const val CLICKED_TRACK: String = "clicked_track"
-
-    }
-
 
     fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(
@@ -183,7 +223,9 @@ class PlayerActivity : AppCompatActivity() {
                 R.drawable.dislike_button
             }
         binding.likeButton.setImageResource(imageResource)
-
     }
 
+    private fun showBottomSheet() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
 }

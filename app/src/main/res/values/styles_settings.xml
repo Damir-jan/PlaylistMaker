@@ -88,6 +88,74 @@
 
     </style>
 
+    <!-- это стиль кнопки назад  -->
+    <style name="ImageViewBackStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/light_mode_back</item>
+        <item name="tint">?attr/colorOnPrimary</item>
+    </style>
+
+    <!-- это стиль шрифта   -->
+    <style name="TextMedium22">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/gray_button</item> <!-- Цвет рамки в обычном состоянии -->
+        <item name="colorControlActivated">@color/blue_colors</item> <!-- Цвет рамки при фокусе и вводе текста -->
+    </style>
+
+    <style name="TextInputEditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColorHint">?attr/colorOnPrimary</item>  <!-- Цвет подсказки, когда она находится внутри поля (при отсутствии фокуса) -->
+        <item name="android:textColor">?attr/colorOnPrimary</item>  <!-- Цвет текста внутри поля -->
+
+    </style>
+
+    <style name="ButtonsStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:paddingVertical">6dp</item>
+        <item name="paddingStart">8dp</item>
+        <item name="paddingEnd">6dp</item>
+        <item name="android:backgroundTint">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="cornerRadius">54dp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="RoundedCornersImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="TextRegular12">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="TextRegular16">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="TextMedium19">
+        <item name="android:textSize">19sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
 </resources>
 
 

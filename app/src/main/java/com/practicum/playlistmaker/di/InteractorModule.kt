@@ -1,7 +1,11 @@
 package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.library.domain.db.FavoritesTrackInteractor
+import com.practicum.playlistmaker.library.domain.db.LocalStorageInteractor
+import com.practicum.playlistmaker.library.domain.db.PlaylistsInteractor
 import com.practicum.playlistmaker.library.domain.impl.FavoritesTrackInteractorImpl
+import com.practicum.playlistmaker.library.domain.impl.LocalStorageInteractorImpl
+import com.practicum.playlistmaker.library.domain.impl.PlaylistsInteractorImpl
 import com.practicum.playlistmaker.player.domain.InteractorImpl.PlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.interactor.PlayerInteractor
 import com.practicum.playlistmaker.search.domain.api.TrackInteractor
@@ -31,5 +35,12 @@ val interactorModule = module {
     }
     single<FavoritesTrackInteractor> {
         FavoritesTrackInteractorImpl(favoriteTrackRepository = get())
+    }
+
+    factory<LocalStorageInteractor> {
+        LocalStorageInteractorImpl(localStorageRepository = get())
+    }
+    factory<PlaylistsInteractor> {
+        PlaylistsInteractorImpl(playlistsRepository = get())
     }
 }
