@@ -9,6 +9,7 @@ import com.practicum.playlistmaker.library.domain.db.FavoritesTrackInteractor
 import com.practicum.playlistmaker.library.domain.db.PlaylistsInteractor
 import com.practicum.playlistmaker.player.domain.interactor.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerState
+import com.practicum.playlistmaker.player.ui.models.TrackInPlaylistState
 import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,6 +43,8 @@ class PlayerViewModel(
     private val playlistsLiveData = MutableLiveData<List<Playlist>>()
     fun observePlaylists(): LiveData<List<Playlist>> = playlistsLiveData
 
+    private val trackInPlaylistLiveData = MutableLiveData<TrackInPlaylistState>()
+    fun observeTrackInPlaylistState(): LiveData<TrackInPlaylistState> = trackInPlaylistLiveData
 
     private fun updateTimer() {
         timerJob = viewModelScope.launch {
@@ -99,8 +102,8 @@ class PlayerViewModel(
 
     }
 
-     fun releasePlayer() {
-        playerInteractor.releasePlayer()
+    fun resetPlayer() {
+        playerInteractor.resetPlayer()
 
     }
 
@@ -136,6 +139,17 @@ class PlayerViewModel(
             playlistsInteractor.getSavedPlaylists().collect { playlists ->
                 playlistsLiveData.postValue(playlists)
             }
+        }
+    }
+
+    fun addTracksIdInPlaylist(playlist: Playlist, tracksId: List<Int>, track: Track) {
+        if (track.trackId in tracksId) {
+            trackInPlaylistLiveData.postValue(TrackInPlaylistState.TrackIsAlreadyInPlaylist(playlist.playlistName))
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                playlistsInteractor.addTracksIdInPlaylist(playlist, tracksId, track)
+            }
+            trackInPlaylistLiveData.postValue(TrackInPlaylistState.TrackAddToPlaylist(playlist.playlistName))
         }
     }
 

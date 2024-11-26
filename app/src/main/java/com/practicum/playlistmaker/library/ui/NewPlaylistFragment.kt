@@ -51,7 +51,7 @@ class NewPlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val playlistNameEditText =
-            binding.playlistName.findViewById<TextInputEditText>(R.id.playlistName)
+            binding.playlistName.findViewById<TextInputEditText>(R.id.playlistLayout)
 
         val playlistDescriptionEditText =
             binding.playlistDescription.findViewById<TextInputEditText>(R.id.playlistDescription)

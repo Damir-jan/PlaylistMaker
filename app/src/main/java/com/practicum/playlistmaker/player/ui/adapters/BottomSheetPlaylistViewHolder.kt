@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.ui.adapters
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.practicum.playlistmaker.R
@@ -10,14 +9,17 @@ import com.practicum.playlistmaker.library.domain.Playlist
 class BottomSheetPlaylistViewHolder (private val binding: BottomSheetViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(model: Playlist) {
+    fun bind(playlist: Playlist, clickListener: ((Int, List<Int>, Playlist) -> Unit)?) {
         with(binding) {
-            playlistNameTv.text = model.playlistName
-            tracksCount.text = model.tracksCount.toString()
+            playlistNameTv.text = playlist.playlistName
+            tracksCount.text = playlist.tracksCount.toString()
         }
-        Glide.with(itemView).load(model.uri).centerCrop()
+        Glide.with(itemView).load(playlist.uri).centerCrop()
             .placeholder(R.drawable.placeholder).into(binding.playlistCover)
 
-        Log.d("BottomSheetPlaylistViewHolder", "Loading image from: ${model.uri}")
+
+        binding.root.setOnClickListener {
+            clickListener?.invoke(adapterPosition, playlist.tracksIdInPlaylist, playlist)
+        }
     }
 }

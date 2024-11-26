@@ -20,7 +20,7 @@ class NewPlaylistViewModel(
     private var uri: String? = null
     private var tracksCount = 0
 
-    fun saveImageToLocalStorage(uri: Uri) { //можно URI передать?
+    fun saveImageToLocalStorage(uri: Uri) {
         localStorageInteractor.saveImageToLocalStorage(uri)
     }
 

@@ -18,23 +18,16 @@ class LocalStorageRepositoryImpl(private val context: Context) : LocalStorageRep
 
     override fun saveImageToLocalStorage(uri: Uri) {
 
-        //создаём экземпляр класса File, который указывает на нужный каталог
         val filePath =
             File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), DIRECTORY_NAME)
-        //создаем каталог, если он не создан
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
-        //создаём экземпляр класса File, который указывает на файл внутри каталога
-        val file = File(filePath, FILE_NAME)  ///////нужны разные названия для разных плейлистов?
-        // создаём входящий поток байтов из выбранной картинки
+        val file = File(filePath, FILE_NAME)
         val inputStream = context.contentResolver.openInputStream(uri)
-        // создаём исходящий поток байтов в созданный выше файл
         val outputStream = FileOutputStream(file)
-        // записываем картинку с помощью BitmapFactory
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 }
-//удалить комменты в конце

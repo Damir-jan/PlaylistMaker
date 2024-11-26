@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.player.ui.adapters.BottomSheetPlaylistAdapter
 import com.practicum.playlistmaker.player.ui.models.PlayerState
+import com.practicum.playlistmaker.player.ui.models.TrackInPlaylistState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -76,6 +78,10 @@ class PlayerFragment : Fragment() {
             renderLikeButton(it)
         }
 
+        viewModel.observeTrackInPlaylistState().observe(viewLifecycleOwner) {
+            makeToast(it)
+        }
+
         binding.back.setOnClickListener {
             findNavController().navigateUp() }
 
@@ -126,6 +132,15 @@ class PlayerFragment : Fragment() {
             adapter?.playlists?.clear()
             adapter?.playlists?.addAll(playlists)
             adapter?.notifyDataSetChanged()
+        }
+
+        adapter?.itemClickListener = { position, tracksId, playlist ->
+            viewModel.addTracksIdInPlaylist(playlist, tracksId, track)
+        }
+
+        binding.newPlaylist.setOnClickListener {
+            val action = PlayerFragmentDirections.actionPlayerFragmentToNewPlaylistFragment()
+            findNavController().navigate(action)
         }
     }
 
@@ -181,7 +196,7 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun prepare() {  //??????
+    private fun prepare() {
         binding.playButton.setImageResource(R.drawable.play_button)
         binding.timer.text = String.format("%02d:%02d", 0, 0)
     }
@@ -198,7 +213,7 @@ class PlayerFragment : Fragment() {
     }
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.releasePlayer()
+        viewModel.resetPlayer()
     }
     private fun updatePlayingTime(time: String) {
         binding.timer.text = time
@@ -209,7 +224,7 @@ class PlayerFragment : Fragment() {
         return "%02d:%02d".format(minutes, seconds)
     }
 
-    fun dpToPx(dp: Float, context: Context): Int {
+    private fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics
         ).toInt()
@@ -227,5 +242,23 @@ class PlayerFragment : Fragment() {
 
     private fun showBottomSheet() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    private fun makeToast(state: TrackInPlaylistState) {
+        when (state) {
+            is TrackInPlaylistState.TrackIsAlreadyInPlaylist -> Toast.makeText(
+                requireContext(),
+                getString(R.string.track_already_add_to_playlist) + " ${state.playlistName}",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            is TrackInPlaylistState.TrackAddToPlaylist -> Toast.makeText(
+                requireContext(),
+                getString(R.string.track_add_now) + " ${state.playlistName}",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            else -> {}
+        }
     }
 }

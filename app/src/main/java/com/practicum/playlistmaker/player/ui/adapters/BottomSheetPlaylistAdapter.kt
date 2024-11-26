@@ -6,12 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.databinding.BottomSheetViewBinding
 import com.practicum.playlistmaker.library.domain.Playlist
 
-class BottomSheetPlaylistAdapter :
+class BottomSheetPlaylistAdapter() :
     RecyclerView.Adapter<BottomSheetPlaylistViewHolder>() {
+
+    var itemClickListener: ((Int, List<Int>, Playlist) -> Unit)? = null
 
     val playlists: MutableList<Playlist> = mutableListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BottomSheetPlaylistViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BottomSheetPlaylistViewHolder {
         val binding =
             BottomSheetViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return BottomSheetPlaylistViewHolder(binding)
@@ -22,6 +27,6 @@ class BottomSheetPlaylistAdapter :
     }
 
     override fun onBindViewHolder(holder: BottomSheetPlaylistViewHolder, position: Int) {
-        holder.bind(playlists[position])
+        holder.bind(playlists[position], itemClickListener)
     }
 }

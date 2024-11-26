@@ -10,7 +10,7 @@
     android:orientation="horizontal"
     android:theme="@style/Theme.PlaylistMaker">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/playlistCover"
         android:layout_width="45dp"
         android:layout_height="45dp"

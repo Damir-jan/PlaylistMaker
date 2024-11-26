@@ -320,11 +320,11 @@
             style="@style/TextMedium19"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="@dimen/header_indent_24"
+            android:layout_marginTop="@dimen/indent_title_12"
             android:paddingVertical="18dp"
             android:gravity="center"
-            android:text="Добавить в плейлист"
+            android:text="@string/add_playlist"
             android:visibility="visible" />
 
         <Button
@@ -334,8 +334,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_16dp"
-            android:layout_marginBottom="24dp"
-            android:text="Новый плейлист" />
+            android:layout_marginBottom="@dimen/header_indent_24"
+            android:text="@string/new_playlist" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

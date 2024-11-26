@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.MediatekaFragmentDirections
 import com.practicum.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import com.practicum.playlistmaker.library.ui.state.FavoriteState
 import com.practicum.playlistmaker.library.ui.view_model.FavoriteTracksViewModel
@@ -76,10 +75,8 @@ class FavoriteTracksFragment : Fragment() {
         openPlayerDebounce = debounce<Track>(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { clickedTrack ->
-            findNavController().navigate(
-                R.id.action_libraryFragment_to_playerActivity,
-                bundleOf(CLICKED_TRACK to clickedTrack)
-            )
+            val action = MediatekaFragmentDirections.actionMediatekaFragmentToPlayerFragment(clickedTrack)
+            findNavController().navigate(action)
         }
     }
 
