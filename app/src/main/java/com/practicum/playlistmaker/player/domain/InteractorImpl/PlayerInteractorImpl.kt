@@ -41,8 +41,8 @@ class PlayerInteractorImpl(
         return playerRepository.isPlaying()
     }
 
-    override fun releasePlayer() {
-        playerRepository.releasePlayer()
+    override fun resetPlayer() {
+        playerRepository.resetPlayer()
     }
 
 }

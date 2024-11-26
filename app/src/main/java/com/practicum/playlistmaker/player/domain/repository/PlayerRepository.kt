@@ -13,5 +13,5 @@ interface PlayerRepository {
     fun startPlayer()
     fun pausePlayer()
     fun isPlaying(): Boolean
-    fun releasePlayer()
+    fun resetPlayer()
 }

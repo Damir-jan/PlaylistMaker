@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,7 +12,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -21,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
-import com.practicum.playlistmaker.player.ui.player.PlayerActivity
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.ui.adapters.TracksAdapter
 import com.practicum.playlistmaker.search.ui.models.SearchTracksState
@@ -92,10 +89,8 @@ class SearchFragment : Fragment() {
         ) { clickedTrack ->
             viewModel.onClickedTrack(listOf(clickedTrack))
             historyAdapter.notifyDataSetChanged()
-            findNavController().navigate(
-                R.id.action_searchFragment_to_playerActivity,
-                bundleOf(CLICKED_TRACK to clickedTrack)
-            )
+            val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(clickedTrack)
+            findNavController().navigate(action)
         }
 
         binding.searchLine.setOnFocusChangeListener { _, hasFocus ->
@@ -158,14 +153,12 @@ class SearchFragment : Fragment() {
 
         binding.cleanHistory.setOnClickListener {
             lifecycleScope.launch {
-                val historyTracks = viewModel.readTracksFromHistory().toMutableList()  ///////2
-                historyTracks.clear()
+                viewModel.clearHistory()
+                historyAdapter.setData(emptyList())
+                binding.historyLayout.visibility = View.GONE
+                historyAdapter.notifyDataSetChanged()
             }
-            viewModel.clearHistory()
-            binding.historyLayout.visibility = View.GONE
-            historyAdapter.notifyDataSetChanged()
         }
-
 
     }
 
@@ -178,10 +171,11 @@ class SearchFragment : Fragment() {
 
     private fun openPlayer(clickedTrack: Track) {
         if (clickDebounce()) {
-            viewModel.onClickedTrack(listOf(clickedTrack))   // странно как-то, что я передаю здесь List, а не track = ?
-            val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
-            playerIntent.putExtra(CLICKED_TRACK, clickedTrack)
-            startActivity(playerIntent)
+            viewModel.onClickedTrack(listOf(clickedTrack))
+
+
+            val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(clickedTrack)
+            findNavController().navigate(action)
         }
     }
 

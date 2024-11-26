@@ -6,6 +6,8 @@
         <item name="colorOnPrimary">@color/black_colors</item>
         <item name="colorOnSecondary">@color/near_black_colors</item>
         <item name="colorOnBackground">@color/light_mode_icon</item>
+        <item name="colorPrimaryVariant">@color/rectangle</item>
+        <item name="colorButtonNormal">@color/button_newPlaylist</item>
 
 
         <!-- Customize your light theme here. -->
