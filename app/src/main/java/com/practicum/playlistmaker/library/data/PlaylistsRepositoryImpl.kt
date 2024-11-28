@@ -34,6 +34,7 @@ class PlaylistsRepositoryImpl(private val appDatabase: AppDatabase) : PlaylistsR
             it.map { entity -> entity.toPlaylist() }
         }
     }
+
     override suspend fun updatePlaylist(playlist: Playlist) {
         appDatabase.getPlaylistDao().updatePlaylist(playlist.toPlaylistEntity())
     }

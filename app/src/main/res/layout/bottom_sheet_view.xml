@@ -2,11 +2,11 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:foreground="?attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="12dp"
     android:layout_marginRight="44dp"
+    android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:theme="@style/Theme.PlaylistMaker">
 
@@ -38,15 +38,15 @@
 
         <TextView
             android:id="@+id/tracksCount"
-            android:textColor="?attr/colorOnSecondary"
-            android:textSize="11sp"
-            android:fontFamily= "@font/ys_display_regular"
-            android:textFontWeight="400"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
+            android:fontFamily="@font/ys_display_regular"
             android:maxLines="1"
+            android:textColor="?attr/colorOnSecondary"
+            android:textFontWeight="400"
+            android:textSize="11sp"
             tools:text="0 треков" />
 
     </LinearLayout>

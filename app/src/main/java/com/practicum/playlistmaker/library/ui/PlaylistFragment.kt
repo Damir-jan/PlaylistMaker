@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.MediatekaFragmentDirections
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.library.domain.Playlist
-import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.library.ui.state.PlaylistState
+import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistFragment : Fragment(){
+class PlaylistFragment : Fragment() {
 
     companion object {
 
@@ -25,7 +25,6 @@ class PlaylistFragment : Fragment(){
     private val playlistViewModel: PlaylistsViewModel by viewModel<PlaylistsViewModel>()
 
     private var adapter: PlaylistAdapter? = null
-
 
 
     private var _binding: FragmentPlaylistBinding? = null
@@ -57,7 +56,6 @@ class PlaylistFragment : Fragment(){
         }
 
     }
-
 
 
     override fun onDestroyView() {

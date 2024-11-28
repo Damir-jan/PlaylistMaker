@@ -9,6 +9,6 @@ import com.practicum.playlistmaker.library.data.db.TrackInPlaylistEntity
 interface TrackInPlaylistDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTrackInPlaylist (track: TrackInPlaylistEntity)
+    suspend fun insertTrackInPlaylist(track: TrackInPlaylistEntity)
 
 }

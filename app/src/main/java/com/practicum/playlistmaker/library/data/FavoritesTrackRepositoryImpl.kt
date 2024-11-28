@@ -22,7 +22,8 @@ class FavoritesTrackRepositoryImpl(
     }
 
     override fun getTracks(): Flow<List<Track>> {
-        return appDatabase.getFavoriteTrackDao().getFavoriteTracks().map { convertFromTrackEntity(it) }
+        return appDatabase.getFavoriteTrackDao().getFavoriteTracks()
+            .map { convertFromTrackEntity(it) }
     }
 
     private fun convertFromTrackEntity(tracks: List<FavoritesTrackEntity>): List<Track> {

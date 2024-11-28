@@ -5,16 +5,17 @@ import com.bumptech.glide.Glide
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistViewBinding
 import com.practicum.playlistmaker.library.domain.Playlist
+import com.practicum.playlistmaker.utils.TraksCount.getTracksCountText
 
 class PlaylistViewHolder(private val binding: PlaylistViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(model: Playlist) {
+    fun bind(playlist: Playlist) {
         with(binding) {
-            playlistName.text = model.playlistName
-            tracksCount.text = model.tracksCount.toString()
+            playlistName.text = playlist.playlistName
+            tracksCount.text = getTracksCountText(playlist.tracksCount)
         }
-        Glide.with(itemView).load(model.uri).centerCrop()
+        Glide.with(itemView).load(playlist.uri).centerCrop()
             .placeholder(R.drawable.placeholder).into(binding.playlistCover)
     }
 }

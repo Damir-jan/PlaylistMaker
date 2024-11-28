@@ -4,8 +4,7 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.repository.PlayerRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 
-class PlayerRepositoryImpl(  private val mediaPlayer : MediaPlayer)
- : PlayerRepository {
+class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : PlayerRepository {
 
 
     private var localOnPlayerCompletion: () -> Unit = {}
@@ -15,7 +14,6 @@ class PlayerRepositoryImpl(  private val mediaPlayer : MediaPlayer)
         set(value) {
             localOnPlayerCompletion = value
         }
-
 
 
     override val playerDuration: Int
@@ -41,17 +39,21 @@ class PlayerRepositoryImpl(  private val mediaPlayer : MediaPlayer)
         } else {
         }
     }
+
     override fun startPlayer() {
         mediaPlayer.start()
 
     }
+
     override fun pausePlayer() {
         mediaPlayer.pause()
 
     }
+
     override fun isPlaying(): Boolean {
         return mediaPlayer.isPlaying
     }
+
     override fun resetPlayer() {
         mediaPlayer.reset()
     }

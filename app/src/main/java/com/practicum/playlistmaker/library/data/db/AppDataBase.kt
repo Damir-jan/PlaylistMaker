@@ -6,7 +6,10 @@ import com.practicum.playlistmaker.library.data.dao.FavoritesTrackDao
 import com.practicum.playlistmaker.library.data.dao.PlaylistDao
 import com.practicum.playlistmaker.library.data.dao.TrackInPlaylistDao
 
-@Database(version = 4, entities = [FavoritesTrackEntity::class, PlaylistEntity::class, TrackInPlaylistEntity::class])
+@Database(
+    version = 4,
+    entities = [FavoritesTrackEntity::class, PlaylistEntity::class, TrackInPlaylistEntity::class]
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getFavoriteTrackDao(): FavoritesTrackDao

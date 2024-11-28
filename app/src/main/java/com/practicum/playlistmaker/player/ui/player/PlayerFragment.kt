@@ -70,17 +70,35 @@ class PlayerFragment : Fragment() {
         }
 
 
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
-
         viewModel.observeFavoriteState().observe(viewLifecycleOwner) {
             renderLikeButton(it)
         }
+        viewModel.observeTrackInPlaylistState().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is TrackInPlaylistState.TrackAddToPlaylist -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.track_add_now) + " ${state.playlistName}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    viewModel.markTrackAddedHandled()
+                }
 
-        viewModel.observeTrackInPlaylistState().observe(viewLifecycleOwner) {
-            makeToast(it)
+                is TrackInPlaylistState.TrackIsAlreadyInPlaylist -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.track_already_add_to_playlist) + " ${state.playlistName}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    viewModel.markTrackAddedHandled()
+                }
+
+                else -> {}
+            }
         }
+
 
         binding.back.setOnClickListener {
             findNavController().navigateUp() }
@@ -137,6 +155,7 @@ class PlayerFragment : Fragment() {
         adapter?.itemClickListener = { position, tracksId, playlist ->
             viewModel.addTracksIdInPlaylist(playlist, tracksId, track)
         }
+
 
         binding.newPlaylist.setOnClickListener {
             val action = PlayerFragmentDirections.actionPlayerFragmentToNewPlaylistFragment()
@@ -244,21 +263,4 @@ class PlayerFragment : Fragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    private fun makeToast(state: TrackInPlaylistState) {
-        when (state) {
-            is TrackInPlaylistState.TrackIsAlreadyInPlaylist -> Toast.makeText(
-                requireContext(),
-                getString(R.string.track_already_add_to_playlist) + " ${state.playlistName}",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            is TrackInPlaylistState.TrackAddToPlaylist -> Toast.makeText(
-                requireContext(),
-                getString(R.string.track_add_now) + " ${state.playlistName}",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            else -> {}
-        }
-    }
 }

@@ -24,7 +24,7 @@ object PlaylistDbConvertor {
             playlistName,
             playlistDescription,
             uri,
-            fromStringToListInt( tracksIdInPlaylist),
+            fromStringToListInt(tracksIdInPlaylist),
             tracksCount
         )
     }

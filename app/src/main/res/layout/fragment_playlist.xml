@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/newPlaylist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/switch_indent"
-        android:paddingStart="@dimen/icons_padding_left"
-        android:paddingEnd="@dimen/switch_indent"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/header_indent_24"
         android:backgroundTint="?attr/colorOnSecondary"
         android:fontFamily="@font/ys_display_medium"
+        android:paddingHorizontal="@dimen/switch_indent"
+        android:paddingStart="@dimen/icons_padding_left"
+        android:paddingEnd="@dimen/switch_indent"
         android:text="Новый плейлист"
         android:textAllCaps="false"
         android:textColor="?attr/colorSecondary"
@@ -22,38 +23,37 @@
         app:cornerRadius="@dimen/radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/placeholderImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/nothing_to_find"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_46dp"
+        android:src="@drawable/nothing_to_find"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/newPlaylist"
-        android:visibility="gone">
+        app:layout_constraintTop_toBottomOf="@id/newPlaylist">
 
     </ImageView>
 
-    <TextView android:id="@+id/textPlaylist"
+    <TextView
+        android:id="@+id/textPlaylist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginHorizontal="@dimen/header_indent_24"
         android:layout_marginTop="@dimen/margin_46dp"
-        android:layout_gravity="center"
-        android:textSize="@dimen/text_size_mediateka"
         android:fontFamily="@font/ys_display_medium"
-        android:textColor="?attr/colorOnSecondary"
         android:text="@string/playlistUI"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="@dimen/text_size_mediateka"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/placeholderImage"
-        android:visibility="gone"
-       />
+        app:layout_constraintTop_toBottomOf="@id/placeholderImage" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

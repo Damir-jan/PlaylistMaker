@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.library.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,7 @@ class NewPlaylistFragment : Fragment() {
         _binding = FragmentNewPlaylistBinding.inflate(inflater, container, false)
 
         requireActivity().getWindow()
-            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN); //чтобы клавиатура не перекрывала окно "Описание"
+            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         return binding.root
     }
@@ -59,6 +58,7 @@ class NewPlaylistFragment : Fragment() {
         playlistNameEditText.doOnTextChanged { text, _, _, _ ->
             binding.createPlaylist.isEnabled = !text.isNullOrBlank()
 
+
             newPlaylistVewModel.setPlaylistName(text.toString())
             toastPlaylistName = text.toString()
         }
@@ -74,7 +74,7 @@ class NewPlaylistFragment : Fragment() {
                 newPlaylistVewModel.setUri(uri)
                 isImageAdd = true
             } else {
-                Log.d("PhotoPicker", "No media selected")
+
             }
         }
 

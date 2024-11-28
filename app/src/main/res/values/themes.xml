@@ -8,11 +8,17 @@
         <item name="colorOnBackground">@color/light_mode_icon</item>
         <item name="colorPrimaryVariant">@color/rectangle</item>
         <item name="colorButtonNormal">@color/button_newPlaylist</item>
+        <item name="colorOnPrimaryContainer">@color/inputPlaylist</item>
+        <item name="materialAlertDialogTheme">@style/MyAlertDialogTheme.Light</item>
+
+
 
 
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+
+
 
 
 </resources>

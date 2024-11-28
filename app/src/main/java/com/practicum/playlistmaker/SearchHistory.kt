@@ -10,7 +10,7 @@ const val quantityTracksInHistory = 10
 
 
 class SearchHistory(val sharedPreferences: SharedPreferences) {
-    fun saveTrack(track:List<Track>) {
+    fun saveTrack(track: List<Track>) {
         val historyTracks = readTracks().toMutableList()
 
         historyTracks.removeAll { existingTrack ->

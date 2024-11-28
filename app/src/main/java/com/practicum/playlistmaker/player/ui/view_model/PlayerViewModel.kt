@@ -19,13 +19,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
-    private val playerInteractor : PlayerInteractor,
+    private val playerInteractor: PlayerInteractor,
     private val favoritesTrackInteractor: FavoritesTrackInteractor,
     private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
-
-
-
 
 
     private var timerJob: Job? = null
@@ -43,8 +40,11 @@ class PlayerViewModel(
     private val playlistsLiveData = MutableLiveData<List<Playlist>>()
     fun observePlaylists(): LiveData<List<Playlist>> = playlistsLiveData
 
-    private val trackInPlaylistLiveData = MutableLiveData<TrackInPlaylistState>()
-    fun observeTrackInPlaylistState(): LiveData<TrackInPlaylistState> = trackInPlaylistLiveData
+
+    private val trackInPlaylistLiveData = MutableLiveData<TrackInPlaylistState?>()
+    fun observeTrackInPlaylistState(): LiveData<TrackInPlaylistState?> = trackInPlaylistLiveData
+
+
 
     private fun updateTimer() {
         timerJob = viewModelScope.launch {
@@ -61,7 +61,6 @@ class PlayerViewModel(
             Locale.getDefault()
         ).format(playerInteractor.playerCurrentPosition) ?: "00:00"
     }
-
 
 
     private fun renderState(state: PlayerState) {
@@ -86,18 +85,16 @@ class PlayerViewModel(
     }
 
 
-
-
-     fun startPlayer() {
+    fun startPlayer() {
         renderState(PlayerState.Play)
         playerInteractor.startPlayer()
         updateTimer()
     }
 
-     fun pausePlayer() {
+    fun pausePlayer() {
         renderState(PlayerState.Pause)
         playerInteractor.pausePlayer()
-         timerJob?.cancel()
+        timerJob?.cancel()
 
 
     }
@@ -107,11 +104,11 @@ class PlayerViewModel(
 
     }
 
-     fun isPlaying(): Boolean {
+    fun isPlaying(): Boolean {
         return playerInteractor.isPlaying()
     }
 
-     fun playbackControl() {
+    fun playbackControl() {
         if (isPlaying()) {
             pausePlayer()
         } else {
@@ -124,7 +121,7 @@ class PlayerViewModel(
     }
 
     fun onFavoriteClicked(track: Track) {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             if (favoritesTrackInteractor.isTrackFavorite(track.trackId)) {
                 favoritesTrackInteractor.unlikeTrack(track)
                 favoriteLiveData.postValue(false)
@@ -134,6 +131,7 @@ class PlayerViewModel(
             }
         }
     }
+
     fun getSavedPlaylists() {
         viewModelScope.launch(Dispatchers.IO) {
             playlistsInteractor.getSavedPlaylists().collect { playlists ->
@@ -151,6 +149,10 @@ class PlayerViewModel(
             }
             trackInPlaylistLiveData.postValue(TrackInPlaylistState.TrackAddToPlaylist(playlist.playlistName))
         }
+    }
+
+    fun markTrackAddedHandled() {
+        trackInPlaylistLiveData.postValue(null)
     }
 
 }

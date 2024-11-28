@@ -13,6 +13,8 @@
     <color name="gray_button">#AEAFB4</color>
     <color name="rectangle">#E6E8EB</color>
     <color name="button_newPlaylist">#FFFFFFFF</color>
+    <color name="inputPlaylist">#FFFFFFFF</color>
+
 
 
 </resources>

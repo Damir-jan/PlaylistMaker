@@ -75,7 +75,8 @@ class FavoriteTracksFragment : Fragment() {
         openPlayerDebounce = debounce<Track>(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { clickedTrack ->
-            val action = MediatekaFragmentDirections.actionMediatekaFragmentToPlayerFragment(clickedTrack)
+            val action =
+                MediatekaFragmentDirections.actionMediatekaFragmentToPlayerFragment(clickedTrack)
             findNavController().navigate(action)
         }
     }
