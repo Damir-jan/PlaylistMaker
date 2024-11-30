@@ -7,7 +7,7 @@
     android:background="?attr/colorSecondary"
     android:orientation="vertical"
     android:theme="@style/Theme.PlaylistMaker"
-    tools:context="com.practicum.playlistmaker.library.ui.PlaylistFragment">
+    tools:context="com.practicum.playlistmaker.library.ui.fragment.PlaylistFragment">
 
     <ImageView
         android:id="@+id/back"

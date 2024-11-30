@@ -8,7 +8,6 @@ import com.practicum.playlistmaker.search.data.dto.TrackRequest
 import com.practicum.playlistmaker.search.data.preferences.SharedPreferencesSearchClient
 import com.practicum.playlistmaker.search.domain.api.SearchRepository
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.TrackTimeConverter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -32,7 +31,7 @@ class SearchRepositoryImpl(
                         it.trackId,
                         it.trackName,
                         it.artistName,
-                        TrackTimeConverter.milsToMinSec(it.trackTimeMillis),
+                        it.trackTimeMillis,
                         it.artworkUrl100,
                         it.collectionName,
                         it.releaseDate,

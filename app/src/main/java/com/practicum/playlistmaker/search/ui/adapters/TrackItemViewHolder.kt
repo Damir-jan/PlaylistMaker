@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.utils.TrackTimeConverter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -27,7 +28,7 @@ class TrackItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(model: Track) {
         asTrackName.text = model.trackName
         textViewFirst.text = model.artistName
-        textViewSecond.text = model.trackTime
+        textViewSecond.text =  TrackTimeConverter.milsToMinSec(model.trackTimeMillis)
 
         Glide.with(itemView.context)
             .load(model.artworkUrl100)

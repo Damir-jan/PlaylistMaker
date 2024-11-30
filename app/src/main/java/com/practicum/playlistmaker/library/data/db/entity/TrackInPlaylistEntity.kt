@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.library.data.db
+package com.practicum.playlistmaker.library.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -10,7 +10,7 @@ data class TrackInPlaylistEntity(
     val trackId: Int,
     val trackName: String,
     val artistName: String,
-    val trackTime: String,
+    val trackTime: Long,
     val artworkUrl100: String,
     val collectionName: String,
     val releaseDate: String,

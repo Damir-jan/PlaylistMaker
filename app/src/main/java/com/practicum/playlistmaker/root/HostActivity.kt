@@ -27,7 +27,7 @@ class HostActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playerFragment, R.id.newPlaylistFragment -> {
+                R.id.playerFragment, R.id.newPlaylistFragment, R.id.playlistSomeFragment -> {
                     binding.bottomNavigationView.isVisible = false
                 }
 

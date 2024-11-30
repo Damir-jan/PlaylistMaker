@@ -13,6 +13,8 @@ class TracksAdapter(
 
     var tracks: MutableList<Track> = mutableListOf()
 
+    var onLongClickListener: ((clickedTrack: Track) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackItemViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.card_view_search, parent, false)
@@ -27,16 +29,21 @@ class TracksAdapter(
             onClickListener(selectedTrack)
 
         }
+
+        holder.itemView.setOnLongClickListener {
+            onLongClickListener?.invoke(selectedTrack)
+            true
+
+        }
     }
 
-    override fun getItemCount(): Int {
-        return tracks.size
+        override fun getItemCount(): Int {
+            return tracks.size
+        }
+
+        fun setData(newTracks: List<Track>) {
+            tracks.clear()
+            tracks.addAll(newTracks)
+        }
+
     }
-    fun setData(newTracks: List<Track>) {
-        tracks.clear()
-        tracks.addAll(newTracks)
-    }
-   // fun interface TrackClickListener {
-   //   fun onTrackClick(track: Track)
-   //}
-}
