@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.root
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.practicum.playlistmaker.R
@@ -23,6 +24,18 @@ class HostActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
         binding.bottomNavigationView.selectedItemId = R.id.mediatekaFragment
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.playerFragment, R.id.newPlaylistFragment -> {
+                    binding.bottomNavigationView.isVisible = false
+                }
+
+                else -> {
+                    binding.bottomNavigationView.isVisible = true
+                }
+            }
+        }
 
     }
 }

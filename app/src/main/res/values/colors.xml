@@ -10,6 +10,11 @@
     <color name="search_icon">#AEAFB4</color>
     <color name="light_mode_icon">#AEAFB4</color>
     <color name="color_player_text">#AEAFB4</color>
+    <color name="gray_button">#AEAFB4</color>
+    <color name="rectangle">#E6E8EB</color>
+    <color name="button_newPlaylist">#FFFFFFFF</color>
+    <color name="inputPlaylist">#FFFFFFFF</color>
+
 
 
 </resources>

@@ -17,9 +17,9 @@ class PlayerInteractorImpl(
 
 
     override val playerDuration: Int
-    get() = playerRepository.playerDuration
+        get() = playerRepository.playerDuration
     override val playerCurrentPosition: Int
-    get() = playerRepository.playerCurrentPosition
+        get() = playerRepository.playerCurrentPosition
 
     override fun preparePlayer(
         track: Track,
@@ -41,8 +41,8 @@ class PlayerInteractorImpl(
         return playerRepository.isPlaying()
     }
 
-    override fun releasePlayer() {
-        playerRepository.releasePlayer()
+    override fun resetPlayer() {
+        playerRepository.resetPlayer()
     }
 
 }

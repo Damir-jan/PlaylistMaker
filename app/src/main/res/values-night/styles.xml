@@ -57,4 +57,8 @@
         <item name="android:thumbTint">@color/switch_tint</item>
         <item name="android:trackTint">@color/switch_thumbTint</item>
     </style>
+
+    <style name="MyAlertDialogTheme.Dark" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/blue_colors</item> <!-- Цвет кнопок -->
+    </style>
 </resources>

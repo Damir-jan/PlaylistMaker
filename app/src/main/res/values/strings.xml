@@ -36,8 +36,17 @@
     <string name="playlist" translatable="false">Плейлисты</string>
     <string name="playlistUI" translatable="false">Вы не создали ни одного плейлиста</string>
     <string name="favouriteTracksUI" translatable="false">Ваша медиатека пуста</string>
+    <string name="hello_blank_fragment" translatable="false"> Hello blank fragment</string>
+    <string name="track_add_now" translatable="false">Добавлено в плейлист</string>
+    <string name="track_already_add_to_playlist" translatable="false">Трек уже добавлен в плейлист</string>
+    <string name="add_playlist" translatable="false">Добавить в плейлист</string>
+    <string name="new_playlist" translatable="false">Новый плейлист</string>
+    <string name="name_playlist" translatable="false">Название</string>
+    <string name="about" translatable="false">Описание</string>
+    <string name="create" translatable="false">Создать</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
