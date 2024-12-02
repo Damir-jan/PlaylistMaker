@@ -65,6 +65,30 @@ class PlaylistSomeViewModel(
     }
 
     private fun getTotalTracksDuration(tracksInPlaylist: List<Track>) {
+        if (tracksInPlaylist.isNullOrEmpty()) {
+            totalTracksDurationLiveData.postValue("0 минут")
+            return
+        }
+
+        var totalTracksDuration: Long = 0
+
+        tracksInPlaylist.forEach { track ->
+            totalTracksDuration += track.trackTimeMillis
+        }
+
+        val timeInMin: String = if (totalTracksDuration < tenMinutes) {
+            TrackTimeConverter.milsToToLessThan10Min(totalTracksDuration)
+        } else {
+            TrackTimeConverter.milsToMinSec(totalTracksDuration)
+        }
+
+        val totalMinutes = totalTracksDuration / 60000
+
+        val result = "$timeInMin ${TraksCount.getMinutesWord(totalMinutes.toInt())}"
+        totalTracksDurationLiveData.postValue(result)
+    }
+
+    /*private fun getTotalTracksDuration(tracksInPlaylist: List<Track>) {
         var totalTracksDuration: Long = 0
         tracksInPlaylist?.forEach { track ->
             totalTracksDuration += track.trackTimeMillis
@@ -76,7 +100,7 @@ class PlaylistSomeViewModel(
             timeInMin = TrackTimeConverter.milsToMinSec(totalTracksDuration)
         }
         totalTracksDurationLiveData.postValue(timeInMin + TraksCount.getMinutesWord(timeInMin.toInt()))
-    }
+    }*/
 
     private fun renderTracksInPlaylist(tracksInPlaylist : List<Track>) {
         if (tracksInPlaylist.isEmpty()) {

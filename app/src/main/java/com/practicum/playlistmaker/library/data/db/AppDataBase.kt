@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.library.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.library.data.db.entity.TrackInPlaylistEntity
 
 @Database(
-    version = 6,
+    version = 7,
     entities = [FavoritesTrackEntity::class, PlaylistEntity::class, TrackInPlaylistEntity::class]
 )
 abstract class AppDatabase : RoomDatabase() {

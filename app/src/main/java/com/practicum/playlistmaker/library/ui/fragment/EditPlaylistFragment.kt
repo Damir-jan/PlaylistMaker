@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.library.domain.Playlist
@@ -23,6 +24,9 @@ class EditPlaylistFragment : NewPlaylistFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.visibility = View.GONE
 
         playlistViewModel.getPlaylistById()
         playlistViewModel.observeStatePlaylist().observe(viewLifecycleOwner) { playlist ->

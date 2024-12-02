@@ -7,7 +7,6 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
 
 class TracksAdapter(
-    //private val tracks: MutableList<Track>,
     private val onClickListener: (clickedTrack : Track) -> Unit
 ) : RecyclerView.Adapter<TrackItemViewHolder>() {
 
@@ -44,6 +43,7 @@ class TracksAdapter(
         fun setData(newTracks: List<Track>) {
             tracks.clear()
             tracks.addAll(newTracks)
+            notifyDataSetChanged()
         }
 
     }

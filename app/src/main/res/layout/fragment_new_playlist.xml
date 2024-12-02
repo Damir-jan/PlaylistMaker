@@ -30,7 +30,7 @@
         app:layout_constraintStart_toEndOf="@id/back"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/playlistImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -41,7 +41,8 @@
         app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/newPlaylist" />
+        app:layout_constraintTop_toBottomOf="@id/newPlaylist"
+        app:shapeAppearanceOverlay="@style/RoundedCorners" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/playlist_name"

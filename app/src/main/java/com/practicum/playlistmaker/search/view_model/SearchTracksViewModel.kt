@@ -36,6 +36,11 @@ class SearchTracksViewModel(
     }
 
     fun searchDebounce(changedText: String) {
+        if (changedText.isBlank()) {
+            latestSearchText = ""
+            loadHistory() // Загрузка истории при пустом поиске
+            return
+        }
         if (latestSearchText == changedText) {
             return
         }
@@ -53,7 +58,7 @@ class SearchTracksViewModel(
             return
         }
 
-        searchDebounceJob?.cancel()
+        //searchDebounceJob?.cancel()
 
         renderState(SearchTracksState.Loading)
 
@@ -73,7 +78,7 @@ class SearchTracksViewModel(
         val tracks = mutableListOf<Track>()
 
         if (foundTracks != null) {
-            tracks.clear()   //нет в примере
+            tracks.clear()
             tracks.addAll(foundTracks)
         }
         when {
@@ -114,12 +119,22 @@ class SearchTracksViewModel(
 
 
         suspend fun readTracksFromHistory(): List<Track> {
-            return trackInteractor.readTracksFromHistory()  //здесь сейчас ошибка, так как функция должна быть suspend
+            return trackInteractor.readTracksFromHistory()
         }
 
-        fun clearHistory() {
+    fun clearHistory() {
+        viewModelScope.launch {
             trackInteractor.clearHistory()
+            renderState(SearchTracksState.History(mutableListOf())) // Обновление состояния
         }
+    }
+
+    fun loadHistory() {
+        viewModelScope.launch {
+            val historyTracks =  trackInteractor.readTracksFromHistory()
+            renderState(SearchTracksState.History(historyTracks.toMutableList()))
+        }
+    }
     }
 
 

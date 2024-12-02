@@ -79,7 +79,7 @@ class PlaylistFragment : Fragment() {
     private fun showEmpty() {
         with(binding) {
             newPlaylist.isVisible = true
-            placeholderImage.isVisible = true
+            textPlaylist.isVisible = true
             placeholderImage.isVisible = true
             recyclerView.isVisible = false
         }
@@ -90,7 +90,7 @@ class PlaylistFragment : Fragment() {
             recyclerView.adapter?.notifyDataSetChanged()
 
             newPlaylist.isVisible = true
-            placeholderImage.isVisible = false
+            textPlaylist.isVisible = false
             placeholderImage.isVisible = false
             recyclerView.isVisible = true
         }

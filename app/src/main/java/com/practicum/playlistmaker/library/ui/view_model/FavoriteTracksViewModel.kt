@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.R.string.favouriteTracksUI
 import com.practicum.playlistmaker.library.domain.db.FavoritesTrackInteractor
 import com.practicum.playlistmaker.library.ui.state.FavoriteState
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -34,7 +34,7 @@ class FavoriteTracksViewModel(
 
     private fun processResult(favoriteTracks: List<Track>) {
         if (favoriteTracks.isEmpty()) {
-            renderState(FavoriteState.Empty(context.getString(R.string.favouriteTracksUI)))
+            renderState(FavoriteState.Empty(context.getString(favouriteTracksUI)))
         } else {
             renderState(FavoriteState.Content(favoriteTracks))
         }

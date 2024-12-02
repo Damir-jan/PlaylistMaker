@@ -110,6 +110,6 @@ class FavoriteTracksFragment : Fragment() {
 
         adapter?.tracks?.clear()
         adapter?.tracks?.addAll(favoriteTracks)
-        adapter?.notifyDataSetChanged()  // или используйте adapter?.submitList(favoriteTracks)
+        adapter?.notifyDataSetChanged()
     }
 }
