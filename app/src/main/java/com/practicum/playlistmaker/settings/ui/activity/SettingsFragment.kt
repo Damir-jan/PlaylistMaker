@@ -29,7 +29,6 @@ class SettingsFragment : Fragment() {
 
 
         viewModelSettings.getThemeLiveData().observe(viewLifecycleOwner) { isChecked ->
-
             binding.themeSwitcher.isChecked = isChecked
         }
 
@@ -57,4 +56,5 @@ class SettingsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

@@ -22,7 +22,8 @@
             android:name=".root.HostActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing"
-            android:theme="@style/Theme.PlaylistMaker">
+            android:theme="@style/Theme.PlaylistMaker"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

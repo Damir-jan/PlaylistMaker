@@ -7,8 +7,8 @@ import com.practicum.playlistmaker.library.domain.repository.LocalStorageReposit
 class LocalStorageInteractorImpl(private val localStorageRepository: LocalStorageRepository) :
     LocalStorageInteractor {
 
-    override fun saveImageToLocalStorage(uri: Uri) {
-        localStorageRepository.saveImageToLocalStorage(uri)
+    override fun saveImageToLocalStorage(uri: Uri): String {
+        return localStorageRepository.saveImageToLocalStorage(uri)
     }
 
 }

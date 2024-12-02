@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.library.data.converter
 
-import com.practicum.playlistmaker.library.data.db.FavoritesTrackEntity
+import com.practicum.playlistmaker.library.data.db.entity.FavoritesTrackEntity
 import com.practicum.playlistmaker.search.domain.models.Track
 
 class TrackDbConvertor {
@@ -9,7 +9,7 @@ class TrackDbConvertor {
             track.trackId,
             track.trackName,
             track.artistName,
-            track.trackTime,
+            track.trackTimeMillis,
             track.artworkUrl100,
             track.collectionName,
             track.releaseDate,

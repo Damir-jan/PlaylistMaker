@@ -1,9 +1,9 @@
-package com.practicum.playlistmaker.library.data
+package com.practicum.playlistmaker.library.data.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.library.data.db.PlaylistEntity
+import com.practicum.playlistmaker.library.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.library.domain.Playlist
 
 object PlaylistDbConvertor {

@@ -3,15 +3,18 @@
     <item
         android:id="@+id/searchFragment"
         android:icon="@drawable/search"
-        android:title="@string/search" />
+        android:title="@string/search"
+        />
 
     <item
         android:id="@+id/mediatekaFragment"
         android:icon="@drawable/mediateka"
-        android:title="@string/mediateka" />
+        android:title="@string/mediateka"
+        />
 
     <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/settings"
-        android:title="@string/title_settings" />
+        android:title="@string/title_settings"
+        />
 </menu>

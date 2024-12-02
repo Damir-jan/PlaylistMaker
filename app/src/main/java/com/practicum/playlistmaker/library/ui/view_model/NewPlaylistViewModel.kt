@@ -9,19 +9,19 @@ import com.practicum.playlistmaker.library.domain.db.PlaylistsInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NewPlaylistViewModel(
+open class NewPlaylistViewModel(
     private val localStorageInteractor: LocalStorageInteractor,
     private val playlistsInteractor: PlaylistsInteractor
 ) :
     ViewModel() {
 
-    private var playlistName = ""
-    private var playlistDescription: String? = null
-    private var uri: String? = null
+    open var playlistName = ""
+    open var playlistDescription: String = ""
+    open var uri: String =""
     private var tracksCount = 0
 
-    fun saveImageToLocalStorage(uri: Uri) {
-        localStorageInteractor.saveImageToLocalStorage(uri)
+    fun saveImageToLocalStorage(uri: Uri) : String {
+        return localStorageInteractor.saveImageToLocalStorage(uri)
     }
 
     fun createPlaylist() {
@@ -33,21 +33,11 @@ class NewPlaylistViewModel(
                     playlistDescription = playlistDescription,
                     uri = uri,
                     tracksIdInPlaylist = emptyList(),
-                    tracksCount = 0
+                    tracksCount
                 )
             )
         }
     }
 
-    fun setPlaylistName(playlistName: String) {
-        this.playlistName = playlistName
-    }
 
-    fun setPlaylistDescroption(playlistDescription: String) {
-        this.playlistDescription = playlistDescription
-    }
-
-    fun setUri(uri: Uri?) {
-        this.uri = uri?.toString()
-    }
 }

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.library.ui
+package com.practicum.playlistmaker.library.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,20 +20,24 @@ import com.practicum.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.practicum.playlistmaker.library.ui.view_model.NewPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewPlaylistFragment : Fragment() {
+open class NewPlaylistFragment : Fragment() {
 
     private lateinit var toastPlaylistName: String
 
-    private val newPlaylistVewModel by viewModel<NewPlaylistViewModel>()
+    open val playlistViewModel: NewPlaylistViewModel by viewModel()
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
-    lateinit var confirmDialog: MaterialAlertDialogBuilder
+    private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     private var isImageAdd: Boolean = false
 
     private var _binding: FragmentNewPlaylistBinding? = null
-    private val binding get() = _binding!!
+
+    open val binding get() = _binding!!
+
+    open lateinit var playlistNameEditText: TextInputEditText
+    open lateinit var playlistDescriptionEditText: TextInputEditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -49,29 +53,24 @@ class NewPlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val playlistNameEditText =
-            binding.playlistName.findViewById<TextInputEditText>(R.id.playlistLayout)
 
-        val playlistDescriptionEditText =
-            binding.playlistDescription.findViewById<TextInputEditText>(R.id.playlistDescription)
+        initEditPlaylist()
 
         playlistNameEditText.doOnTextChanged { text, _, _, _ ->
             binding.createPlaylist.isEnabled = !text.isNullOrBlank()
-
-
-            newPlaylistVewModel.setPlaylistName(text.toString())
+            playlistViewModel.playlistName = text.toString()
             toastPlaylistName = text.toString()
         }
 
         playlistDescriptionEditText.doOnTextChanged { text, _, _, _ ->
-            newPlaylistVewModel.setPlaylistDescroption(text.toString())
+            playlistViewModel.playlistDescription = text.toString()
         }
 
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 binding.playlistImage.setImageURI(uri)
-                newPlaylistVewModel.saveImageToLocalStorage(uri)
-                newPlaylistVewModel.setUri(uri)
+                val savedUri = playlistViewModel.saveImageToLocalStorage(uri)
+                playlistViewModel.uri = savedUri
                 isImageAdd = true
             } else {
 
@@ -104,7 +103,7 @@ class NewPlaylistFragment : Fragment() {
             })
 
         binding.createPlaylist.setOnClickListener() {
-            newPlaylistVewModel.createPlaylist()
+            playlistViewModel.createPlaylist()
             findNavController().navigateUp()
             Toast.makeText(requireContext(), "Плейлист $toastPlaylistName создан", Toast.LENGTH_SHORT).show()
         }
@@ -115,7 +114,18 @@ class NewPlaylistFragment : Fragment() {
         _binding = null
     }
 
-    private fun onBackPressed(playlistNameEditText : TextInputEditText, playlistDescriptionEditText : TextInputEditText) {
+    private fun initEditPlaylist() {
+        playlistNameEditText =
+            binding.playlistName.findViewById<TextInputEditText>(R.id.playlistLayout)
+
+        playlistDescriptionEditText =
+            binding.playlistDescription.findViewById<TextInputEditText>(R.id.playlistDescription)
+    }
+
+
+    open fun onBackPressed
+                (playlistNameEditText : TextInputEditText,
+                 playlistDescriptionEditText : TextInputEditText) {
         if (isImageAdd || !playlistNameEditText.text.isNullOrBlank() || !playlistDescriptionEditText.text.isNullOrBlank()) {
             confirmDialog.show()
         } else {
