@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.settings.ui.view_model
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -38,7 +37,6 @@ class SettingsViewModel(
     }
 
     fun clickSwitchTheme(isChecked: Boolean) {
-        Log.d("TEST", "clickSwitchTheme")
         themeLiveData.value = isChecked
         settingsInteractor.updateThemeSetting(isChecked)
         applyTheme(isChecked)
@@ -46,7 +44,6 @@ class SettingsViewModel(
 
 
     private fun applyTheme(darkThemeEnabled: Boolean) {
-        Log.d("TEST", "applyTheme")
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -55,4 +52,6 @@ class SettingsViewModel(
             }
         )
     }
+
+
 }

@@ -8,7 +8,6 @@ import com.practicum.playlistmaker.search.data.dto.TrackRequest
 import com.practicum.playlistmaker.search.data.preferences.SharedPreferencesSearchClient
 import com.practicum.playlistmaker.search.domain.api.SearchRepository
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.TrackTimeConverter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -19,7 +18,45 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
 
 
+
     override fun searchTracks(text: String): Flow<Resource<List<Track>>> = flow {
+        val response = networkClient.doRequest(TrackRequest(text))
+
+        when (response.resultCode) {
+            -1 -> {
+                emit(Resource.Error("Нет интернета"))
+            }
+
+            200 -> {
+                val searchResponse = response as? SearchResponse
+                val tracks = searchResponse?.results?.map {
+                    Track(
+                        it.trackId,
+                        it.trackName,
+                        it.artistName,
+                        it.trackTimeMillis,
+                        it.artworkUrl100,
+                        it.collectionName,
+                        it.releaseDate,
+                        it.primaryGenreName,
+                        it.country,
+                        it.previewUrl
+                    )
+                } ?: emptyList()
+
+                if (tracks.isEmpty()) {
+                    emit(Resource.Empty<List<Track>>())
+                } else {
+                    emit(Resource.Success(tracks))
+                }
+            }
+
+            else -> {
+                emit(Resource.Error("Ошибка сервера"))
+            }
+        }
+    }
+    /*override fun searchTracks(text: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TrackRequest(text))
         when (response.resultCode) {
             -1 -> {
@@ -32,15 +69,17 @@ class SearchRepositoryImpl(
                         it.trackId,
                         it.trackName,
                         it.artistName,
-                        TrackTimeConverter.milsToMinSec(it.trackTimeMillis),
+                        it.trackTimeMillis,
                         it.artworkUrl100,
                         it.collectionName,
                         it.releaseDate,
                         it.primaryGenreName,
                         it.country,
                         it.previewUrl
+
                     )
                 }))
+
             }
 
             else -> {
@@ -48,7 +87,7 @@ class SearchRepositoryImpl(
                 emit(Resource.Error("Ошибка сервера"))
             }
         }
-    }
+    }*/
 
     override suspend fun saveTrackToHistory(track: List<Track>) {
         sharedPreferencesSearchClient.saveTrackToHistory(track)

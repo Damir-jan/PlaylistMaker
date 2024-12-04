@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.library.ui
+package com.practicum.playlistmaker.library.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.MediatekaFragmentDirections
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.library.domain.Playlist
+import com.practicum.playlistmaker.library.ui.PlaylistAdapter
 import com.practicum.playlistmaker.library.ui.state.PlaylistState
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -55,6 +56,11 @@ class PlaylistFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        adapter?.itemClickListener = { position, playlist ->
+            val action = MediatekaFragmentDirections.actionMediatekaFragmentToPlaylistSomeFragment(playlist)
+            findNavController().navigate(action)
+        }
+
     }
 
 
@@ -73,7 +79,7 @@ class PlaylistFragment : Fragment() {
     private fun showEmpty() {
         with(binding) {
             newPlaylist.isVisible = true
-            placeholderImage.isVisible = true
+            textPlaylist.isVisible = true
             placeholderImage.isVisible = true
             recyclerView.isVisible = false
         }
@@ -84,7 +90,7 @@ class PlaylistFragment : Fragment() {
             recyclerView.adapter?.notifyDataSetChanged()
 
             newPlaylist.isVisible = true
-            placeholderImage.isVisible = false
+            textPlaylist.isVisible = false
             placeholderImage.isVisible = false
             recyclerView.isVisible = true
         }

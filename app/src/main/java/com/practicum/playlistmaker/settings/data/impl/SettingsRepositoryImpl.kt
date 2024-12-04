@@ -17,4 +17,5 @@ class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : Setti
             .putBoolean(NIGHT_THEME_KEY, settings.darkTheme)
             .apply()
     }
+
 }

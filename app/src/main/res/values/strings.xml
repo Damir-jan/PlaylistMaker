@@ -44,7 +44,24 @@
     <string name="name_playlist" translatable="false">Название</string>
     <string name="about" translatable="false">Описание</string>
     <string name="create" translatable="false">Создать</string>
+    <string name="track_count_format" translatable="false">%1$d %2$s</string>
 
+
+    <string name="playlist_is_empty" translatable="false">В этом плейлисте нет треков</string>
+    <string name="delete_track_from_playlist" translatable="false">Хотите удалить трек?</string>
+    <string name="delete_playlist" translatable="false">Удалить плейлист</string>
+    <string name="delete_track" translatable="false">Удалить трек</string>
+    <string name="delete" translatable="false">Удалить</string>
+    <string name="cancel" translatable="false">Отменить</string>
+    <string name="no_tracks_to_share" translatable="false">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="share_playlist" translatable="false">Поделиться</string>
+    <string name="edit" translatable="false">Редактировать информацию</string>
+    <string name="do_you_want_delete_playlist" translatable="false">Хотите удалить плейлист</string>
+    <string name="yes" translatable="false">Да</string>
+    <string name="no" translatable="false">Нет</string>
+
+    <string name="editPlaylist" translatable="false">Редактировать</string>
+    <string name="save" translatable="false">Сохранить</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

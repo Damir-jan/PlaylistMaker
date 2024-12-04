@@ -17,6 +17,7 @@
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:dividerColor="@color/gray_button"
         app:dividerThickness="@dimen/dividerThickness"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,16 +25,19 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/colorSecondary"
+        app:itemBackground="@android:color/transparent"
+        app:itemIconTint="@drawable/navigation_menu_color"
+        app:itemRippleColor="@android:color/transparent"
+        app:itemTextColor="@drawable/navigation_menu_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navigation_menu"
-        android:background="?attr/colorSecondary"
-        app:itemIconTint="@drawable/navigation_menu_color"
-        app:itemTextColor="@drawable/navigation_menu_color"
-        app:itemRippleColor="@android:color/transparent"
-        app:itemBackground="@android:color/transparent" />
+        style="@style/BottomNavigationViewStyle"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

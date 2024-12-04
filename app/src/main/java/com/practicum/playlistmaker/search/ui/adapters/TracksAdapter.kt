@@ -7,11 +7,12 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
 
 class TracksAdapter(
-    //private val tracks: MutableList<Track>,
     private val onClickListener: (clickedTrack : Track) -> Unit
 ) : RecyclerView.Adapter<TrackItemViewHolder>() {
 
     var tracks: MutableList<Track> = mutableListOf()
+
+    var onLongClickListener: ((clickedTrack: Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackItemViewHolder {
         val view =
@@ -27,16 +28,22 @@ class TracksAdapter(
             onClickListener(selectedTrack)
 
         }
+
+       /* holder.itemView.setOnLongClickListener {
+            onLongClickListener?.invoke(selectedTrack)
+            true
+
+        }*/
     }
 
-    override fun getItemCount(): Int {
-        return tracks.size
+        override fun getItemCount(): Int {
+            return tracks.size
+        }
+
+        fun setData(newTracks: List<Track>) {
+            tracks.clear()
+            tracks.addAll(newTracks)
+            notifyDataSetChanged()
+        }
+
     }
-    fun setData(newTracks: List<Track>) {
-        tracks.clear()
-        tracks.addAll(newTracks)
-    }
-   // fun interface TrackClickListener {
-   //   fun onTrackClick(track: Track)
-   //}
-}
