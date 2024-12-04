@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.search.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,10 +36,22 @@ class SearchTracksViewModel(
         searchDebounceJob?.cancel()
     }
 
+
     fun searchDebounce(changedText: String) {
+        if (latestSearchText == changedText) {
+            return
+        }
+        this.latestSearchText = changedText
+        searchDebounceJob?.cancel()
+        searchDebounceJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchTrack(changedText)
+        }
+    }
+   /* fun searchDebounce(changedText: String) {
         if (changedText.isBlank()) {
             latestSearchText = ""
-            loadHistory() // Загрузка истории при пустом поиске
+            loadHistory()
             return
         }
         if (latestSearchText == changedText) {
@@ -50,7 +63,7 @@ class SearchTracksViewModel(
             delay(SEARCH_DEBOUNCE_DELAY)
             searchTrack(changedText)
         }
-    }
+    }*/
 
     fun searchTrack(newSearchText: String) {
         if (newSearchText.isBlank()
@@ -58,7 +71,7 @@ class SearchTracksViewModel(
             return
         }
 
-        //searchDebounceJob?.cancel()
+        searchDebounceJob?.cancel()
 
         renderState(SearchTracksState.Loading)
 
@@ -81,6 +94,8 @@ class SearchTracksViewModel(
             tracks.clear()
             tracks.addAll(foundTracks)
         }
+        Log.d("processResult", "foundTracks: $foundTracks, errorMessage: $errorMessage")
+
         when {
             errorMessage != null -> {
                 renderState(

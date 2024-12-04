@@ -11,4 +11,5 @@ interface SearchRepository {
     suspend fun saveTrackToHistory(track: List<Track>)
     suspend fun readTracksFromHistory(): List<Track>
     fun clearHistory()
+
 }

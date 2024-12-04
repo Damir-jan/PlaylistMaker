@@ -29,11 +29,11 @@ class TracksAdapter(
 
         }
 
-        holder.itemView.setOnLongClickListener {
+       /* holder.itemView.setOnLongClickListener {
             onLongClickListener?.invoke(selectedTrack)
             true
 
-        }
+        }*/
     }
 
         override fun getItemCount(): Int {

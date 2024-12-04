@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,7 @@ class SearchFragment : Fragment() {
     private val historyAdapter: TracksAdapter by lazy {
         TracksAdapter { clickedTrack -> openPlayer(clickedTrack) }
     }
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -115,7 +117,6 @@ class SearchFragment : Fragment() {
             binding.searchLine.clearFocus()
             searchAdapter.tracks.clear()
             binding.dataTracks.adapter?.notifyDataSetChanged()
-            //searchAdapter.tracks = arrayListOf()
             viewModel.loadHistory()
             hidePlaceholdersAndUpdateBtn()
             val imm = requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -142,7 +143,7 @@ class SearchFragment : Fragment() {
                     searchAdapter.tracks.clear()
                     binding.dataTracks.adapter?.notifyDataSetChanged()
                     hidePlaceholdersAndUpdateBtn()
-                    viewModel.loadHistory()
+                    //viewModel.loadHistory()
                 }
             }
         }
@@ -196,6 +197,7 @@ class SearchFragment : Fragment() {
 
 
     private fun render(state: SearchTracksState) {
+        Log.d("render", "State: $state")
         when (state) {
             is SearchTracksState.Loading -> showLoading()
             is SearchTracksState.Content -> {
@@ -203,14 +205,24 @@ class SearchFragment : Fragment() {
                 showContent()
             }
 
-            is SearchTracksState.Error -> showError(state.errorMessage)
-            is SearchTracksState.Empty -> showEmpty()
+
+            is SearchTracksState.Error -> {
+                searchAdapter.tracks.clear() // Очистить старые данные
+                binding.dataTracks.adapter?.notifyDataSetChanged()
+                showError(state.errorMessage)
+            }
+
+            is SearchTracksState.Empty ->{
+                searchAdapter.tracks.clear() // Очистить старые данные
+            binding.dataTracks.adapter?.notifyDataSetChanged()
+                    showEmpty ()
+        }
             is SearchTracksState.History -> {
                 if (isFocused) {
                     updateHistoryList(state.tracks)
                     showHistory(state.tracks)
                     searchAdapter.tracks.clear()
-                    binding.dataTracks.adapter?.notifyDataSetChanged()
+                    //binding.dataTracks.adapter?.notifyDataSetChanged()
 
                 }
             }
@@ -244,6 +256,7 @@ class SearchFragment : Fragment() {
 
     private fun showEmpty() {
         with(binding) {
+
             progressBar.visibility = View.GONE
             historyLayout.visibility = View.GONE
             updateButton.visibility = View.GONE
@@ -257,7 +270,6 @@ class SearchFragment : Fragment() {
     private fun showContent() {
         with(binding) {
             dataTracks.adapter?.notifyDataSetChanged()
-
             progressBar.visibility = View.GONE
             historyLayout.visibility = View.GONE
             updateButton.visibility = View.GONE
