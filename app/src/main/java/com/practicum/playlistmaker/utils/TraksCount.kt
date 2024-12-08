@@ -8,6 +8,15 @@ object TraksCount {
             count % 10 in 2..4 && (count % 100 !in 12..14) -> 1
             else -> 2
         }
-        return "$count ${forms[form]}"
+        return " ${forms[form]}"
+    }
+
+    fun getMinutesWord(count: Int): String {
+        val minutesWord = when (count % 10) {
+            1 -> " минута"
+            2, 3, 4 -> " минуты"
+            else -> " минут"
+        }
+        return minutesWord
     }
 }

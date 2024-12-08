@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ class SearchFragment : Fragment() {
         const val CLICKED_TRACK: String = "clicked_track"
         const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+    private var isFocused: Boolean = false
 
     private lateinit var onMusicClickDebounce: (Track) -> Unit
 
@@ -56,10 +58,13 @@ class SearchFragment : Fragment() {
     }
 
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+
     @SuppressLint("NotifyDataSetChanged", "MissingInflatedId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,7 +80,8 @@ class SearchFragment : Fragment() {
         binding.dataTracks.layoutManager = LinearLayoutManager(requireContext())
         binding.tracksHistoryList.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.historyLayout.visibility = View.GONE
+        //binding.historyLayout.visibility = View.GONE
+        hideHistory()
 
         binding.searchLine.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -94,14 +100,12 @@ class SearchFragment : Fragment() {
         }
 
         binding.searchLine.setOnFocusChangeListener { _, hasFocus ->
+            isFocused = hasFocus
             if (hasFocus && binding.searchLine.text.isEmpty()) {
-                lifecycleScope.launch {
-                    val historyTracks = viewModel.readTracksFromHistory().toMutableList()   ///////1
-                    historyAdapter.setData(historyTracks)
-                    binding.historyLayout.isVisible = historyTracks.isNotEmpty()
-                }
+                viewModel.loadHistory()
+
             } else {
-                binding.historyLayout.isVisible = false
+            hideHistory()
             }
         }
 
@@ -111,7 +115,9 @@ class SearchFragment : Fragment() {
         binding.clearIcon.setOnClickListener {
             binding.searchLine.setText("")
             binding.searchLine.clearFocus()
-            searchAdapter.tracks = arrayListOf()
+            searchAdapter.tracks.clear()
+            binding.dataTracks.adapter?.notifyDataSetChanged()
+            viewModel.loadHistory()
             hidePlaceholdersAndUpdateBtn()
             val imm = requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.searchLine.windowToken, 0)
@@ -137,6 +143,7 @@ class SearchFragment : Fragment() {
                     searchAdapter.tracks.clear()
                     binding.dataTracks.adapter?.notifyDataSetChanged()
                     hidePlaceholdersAndUpdateBtn()
+                    //viewModel.loadHistory()
                 }
             }
         }
@@ -190,6 +197,7 @@ class SearchFragment : Fragment() {
 
 
     private fun render(state: SearchTracksState) {
+        Log.d("render", "State: $state")
         when (state) {
             is SearchTracksState.Loading -> showLoading()
             is SearchTracksState.Content -> {
@@ -197,9 +205,27 @@ class SearchFragment : Fragment() {
                 showContent()
             }
 
-            is SearchTracksState.Error -> showError(state.errorMessage)
-            is SearchTracksState.Empty -> showEmpty()
-            is SearchTracksState.History -> showHistory()
+
+            is SearchTracksState.Error -> {
+                searchAdapter.tracks.clear() // Очистить старые данные
+                binding.dataTracks.adapter?.notifyDataSetChanged()
+                showError(state.errorMessage)
+            }
+
+            is SearchTracksState.Empty ->{
+                searchAdapter.tracks.clear() // Очистить старые данные
+            binding.dataTracks.adapter?.notifyDataSetChanged()
+                    showEmpty ()
+        }
+            is SearchTracksState.History -> {
+                if (isFocused) {
+                    updateHistoryList(state.tracks)
+                    showHistory(state.tracks)
+                    searchAdapter.tracks.clear()
+                    //binding.dataTracks.adapter?.notifyDataSetChanged()
+
+                }
+            }
 
             else -> {}
         }
@@ -223,19 +249,19 @@ class SearchFragment : Fragment() {
             placeholderImage.visibility = View.VISIBLE
             placeholderMessage.visibility = View.VISIBLE
 
-            placeholderImage.setImageResource(R.drawable.nothing_to_find)
+            placeholderImage.setImageResource(R.drawable.no_internet_error)
             placeholderMessage.text = errorMessage
         }
     }
 
     private fun showEmpty() {
         with(binding) {
+
             progressBar.visibility = View.GONE
             historyLayout.visibility = View.GONE
             updateButton.visibility = View.GONE
             placeholderImage.visibility = View.VISIBLE
             placeholderMessage.visibility = View.VISIBLE
-
             placeholderImage.setImageResource(R.drawable.nothing_to_find)
             placeholderMessage.setText(R.string.nothing_to_find)
         }
@@ -244,7 +270,6 @@ class SearchFragment : Fragment() {
     private fun showContent() {
         with(binding) {
             dataTracks.adapter?.notifyDataSetChanged()
-
             progressBar.visibility = View.GONE
             historyLayout.visibility = View.GONE
             updateButton.visibility = View.GONE
@@ -278,12 +303,18 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun showHistory() {
+    private fun showHistory(historyTracks: MutableList<Track>) {
         with(binding) {
             tracksHistoryList.visibility = View.VISIBLE
             youSearch.visibility = View.VISIBLE
             cleanHistory.visibility = View.VISIBLE
+            binding.historyLayout.isVisible = historyTracks.isNotEmpty()
         }
+    }
+
+    private fun updateHistoryList(historyTracks: MutableList<Track>) {
+        historyAdapter.setData(historyTracks)
+        historyAdapter.notifyDataSetChanged()
     }
 
 

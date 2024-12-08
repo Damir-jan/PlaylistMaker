@@ -14,4 +14,5 @@ class SettingsInteractorImpl (
     override fun updateThemeSetting(isChecked: Boolean) {
         return settingsRepository.updateThemeSetting(ThemeSettings(isChecked))
     }
+
 }

@@ -14,7 +14,7 @@ class MediatekaFragment : Fragment() {
     private var _binding: FragmentMediatekaBinding? = null
     private val binding get() = _binding!!
 
-        private lateinit var tabMediator: TabLayoutMediator
+    private var tabMediator: TabLayoutMediator? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMediatekaBinding.inflate(inflater, container, false)
@@ -24,23 +24,20 @@ class MediatekaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            val adapter = LibraryPagerAdapter(childFragmentManager, lifecycle)
-            binding.viewPager.adapter = adapter
+        val adapter = LibraryPagerAdapter(childFragmentManager, lifecycle)
+        binding.viewPager.adapter = adapter
 
-            tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                when (position) {
-                    0 -> tab.text = getString(R.string.favouriteTracks)
-                    1 -> tab.text = getString(R.string.playlist)
-                }
+        tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = getString(R.string.favouriteTracks)
+                1 -> tab.text = getString(R.string.playlist)
             }
-            tabMediator.attach()
-
-
         }
-
-
-        override fun onDestroy() {
-            super.onDestroy()
-            tabMediator.detach()
-        }
+        tabMediator?.attach()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        tabMediator?.detach()
+    }
+}

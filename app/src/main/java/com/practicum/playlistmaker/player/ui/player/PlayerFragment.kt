@@ -24,6 +24,7 @@ import com.practicum.playlistmaker.player.ui.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.TrackInPlaylistState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.utils.TrackTimeConverter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerFragment : Fragment() {
@@ -186,7 +187,7 @@ class PlayerFragment : Fragment() {
             binding.trackAlbum.text = track.collectionName
         }
 
-        binding.trackTime.text = track.trackTime
+        binding.trackTime.text = TrackTimeConverter.milsToMinSec(track.trackTimeMillis)
         binding.trackYear.text = track.releaseDate.substring(0, 4)
         binding.trackGenre.text = track.primaryGenreName
         binding.countryTrack.text = track.country

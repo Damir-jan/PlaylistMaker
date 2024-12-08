@@ -11,6 +11,8 @@ class PlaylistAdapter() :
 
     val playlists: MutableList<Playlist> = mutableListOf()
 
+    var itemClickListener: ((Int, Playlist) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
         val binding =
             PlaylistViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,6 +24,6 @@ class PlaylistAdapter() :
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(playlists[position])
+        holder.bind(playlists[position], itemClickListener)
     }
 }

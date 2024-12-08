@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.map
 
 class TrackInteractorImpl(private val repository: SearchRepository) : TrackInteractor {
 
+
     override fun searchTracks(text: String) : Flow<Pair<List<Track>?, String?>> {
         return repository.searchTracks(text).map { result ->
             when (result) {
@@ -19,6 +20,7 @@ class TrackInteractorImpl(private val repository: SearchRepository) : TrackInter
                 is Resource.Error -> {
                     Pair(null, result.message)
                 }
+                is Resource.Empty -> Pair(emptyList(), null)
             }
         }
     }
